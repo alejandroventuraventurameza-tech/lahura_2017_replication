@@ -143,4 +143,38 @@ ningún resultado sin explicar sin dejar constancia del proceso de verificación
 
 ## Estado de la Pregunta 2 (extensión)
 
-**Pendiente.** El enunciado pide extende
+**Pendiente.** El enunciado pide extender los Gráficos 1–2 y los Cuadros 2–5 (sin el MCE no
+lineal) a una muestra más reciente, usando también el Cuadro 29 de la Nota Semanal del BCRP.
+Esta parte está a cargo de Andrea Quispe y Valeria Avilés; en `template/content.tex` hay un
+párrafo marcador de posición (`\textit{[Esta sección será completada...]}`) en la
+Sección "Pregunta 2" indicando exactamente qué falta y con qué estilo/formato debe
+integrarse (mismos paquetes de tablas y figuras que la Sección 1, más el código EViews
+correspondiente en el Anexo A). Ningún resultado de la Pregunta 2 está incluido todavía en
+este repositorio.
+
+## Cómo reproducir
+
+1. **Datos:** correr `data/bcrp_series.ipynb` (Python 3, `pandas`/`requests`) para descargar
+   el panel desde la API del BCRP, o usar directamente `data/tasas_interes_lahura2017.xlsx`
+   ya generado.
+2. **EViews:** importar el panel en EViews 12 (`File → Import`, frecuencia mensual, inicio
+   `2010m08`) o abrir directamente `data/tasas_interes_lahura2017.wf1`. Correr los scripts
+   de `codes/` en el orden A.1–A.9 indicado en el Anexo A del documento (cada uno declara su
+   prerrequisito en el encabezado). Los pasos sin equivalente por línea de comandos (pruebas
+   de Johansen, restricciones VEC, ejes duales en gráficos) están documentados como
+   procedimiento manual en el Anexo B.
+3. **Documento:** compilar `template/content.tex` en Overleaf (requiere `biblatex`+`biber` y
+   el paquete de idioma `babel[spanish]`), manteniendo `codes/` y `template/figures/` como
+   carpetas hermanas/hijas según la estructura de arriba.
+
+## Referencia del paper replicado
+
+Lahura, E. (2017). El efecto traspaso de la tasa de interés de política monetaria en Perú:
+Evidencia reciente. *Revista Estudios Económicos*, 33, 9–27. BCRP.
+<https://www.bcrp.gob.pe/docs/Publicaciones/Revista-Estudios-Economicos/33/ree-33-lahura.pdf>
+
+## Autoría y licencia
+
+Trabajo académico elaborado para el curso Econometría Intermedia: Macro (2026-1, PUCP).
+Uso restringido a fines de evaluación del curso; no se otorga licencia de reutilización sobre
+el análisis, el código o el documento sin autorización de los autores.
