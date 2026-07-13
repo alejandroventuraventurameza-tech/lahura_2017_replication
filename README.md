@@ -1,13 +1,7 @@
 # Réplica de Lahura (2017) — Examen Final, Econometría Intermedia: Macro (PUCP 2026-1)
 
 Réplica y extensión de Erick Lahura (2017), *"El efecto traspaso de la tasa de interés de
-política monetaria en Perú: Evidencia reciente"* (Revista Estudios Económicos 33, BCRP),
-elaborada para el Examen Final del curso Econometría Intermedia: Macro (2026-1, PUCP).
-
-- **Autores (Pregunta 1):** Alejandro Ventura Meza
-- **Autoras (Pregunta 2):** Andrea Quispe, Valeria Avilés
-- **Profesor:** Erick Lahura
-- **Jefe de práctica:** Juan Diego Goicochea
+política monetaria en Perú: Evidencia reciente"* (Revista Estudios Económicos 33, BCRP)
 
 El documento final (`template/content.tex`, compilado en Overleaf) es la fuente de verdad
 del trabajo. Este README resume su contenido y el estado de cada resultado para que pueda
