@@ -123,7 +123,7 @@ como banco de pruebas (búsqueda combinatoria de especificaciones) antes de conf
 especificación ganadora en EViews real — nunca al revés. Detalle completo en el Anexo C
 del documento.
 
-## Estado de la réplica
+## Estado de la Pregunta 1 (réplica)
 
 | Bloque | Series exactas | Detalle |
 |---|---|---|
@@ -141,6 +141,6 @@ acotadas y explicadas con margen de error explícito. Cada discrepancia está do
 Anexo C del documento y en los comentarios del script `.prg` correspondiente — no se deja
 ningún resultado sin explicar sin dejar constancia del proceso de verificación.
 
-## Cómo reproducir
+## Estado de la Pregunta 2 (extensión)
 
-1. **Datos:** correr `data/bcrp_series.ipynb` (Python 3, `pandas`/`reques
+**Pendiente.** El enunciado pide extende
