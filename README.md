@@ -8,7 +8,6 @@ elaborada para el Examen Final del curso Econometría Intermedia: Macro (2026-1,
 - **Autoras (Pregunta 2):** Andrea Quispe, Valeria Avilés
 - **Profesor:** Erick Lahura
 - **Jefe de práctica:** Juan Diego Goicochea
-- **Entrega:** martes 14 de julio de 2026, 9:00 p.m.
 
 El documento final (`template/content.tex`, compilado en Overleaf) es la fuente de verdad
 del trabajo. Este README resume su contenido y el estado de cada resultado para que pueda
