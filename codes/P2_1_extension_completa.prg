@@ -206,7 +206,7 @@ next
 
 for %s R1_pref90 R2_corp_cp R3_ge_cp R4_me_cp R5_corp_lp R6_ge_lp R7_me_lp R8_tamn R9_ftamn
   equation eq_fmols_{%s}.cointreg(method=fmols,trend=c) {%s} RP_ref
-  {%s}.makeresid u_{%s}
+  eq_fmols_{%s}.makeresid u_{%s}
 next
 
 ' Rezagos de Engle-Granger elegidos por Schwarz (ADF sobre el residuo
