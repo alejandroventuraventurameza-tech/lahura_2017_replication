@@ -902,6 +902,189 @@ graph GRAFICO_ROLLING.merge gr_roll_R1_pref90 gr_roll_R2_corp_cp gr_roll_R3_ge_c
 GRAFICO_ROLLING.align(3,3)
 show GRAFICO_ROLLING
 
+' ============================================================
+' SECCION 8: FASE 2 -- ANALISIS DE ROBUSTEZ, SUBMUESTRA
+' PRE-PANDEMIA (2010m08-2020m02). Este bloque completo -- la idea, el
+' recorte de muestra, el bucle de seleccion automatica de rezagos por
+' Schwarz para Johansen, y el calculo explicito de "r" y "prob" en los
+' Graficos 1-2 -- es un aporte de Valeria y Andrea, hecho en paralelo
+' a mi propio trabajo de la Seccion 6/7. Cuando compare los dos
+' enfoques, me parecio que la idea central de Valeria (repetir TODO el
+' analisis, no solo el traspaso, restringiendo la muestra al ultimo
+' mes completo antes del estado de emergencia por COVID-19 en Peru,
+' 2020m02) es un complemento perfecto a mi propia Seccion 6: donde yo
+' busco el quiebre estadisticamente (sup-F/Quandt-Andrews) sin asumir
+' una fecha de antemano, Valeria usa un corte fijo con justificacion
+' economica directa (el inicio de la pandemia), mucho mas facil de
+' explicar a un lector no tecnico. Lo traduzco aqui a mi propia
+' nomenclatura de series (R1_pref90...R9_ftamn, RP_ref) para que corra
+' sobre el mismo workfile de toda la Pregunta 2, en vez de dejarlo como
+' un .prg aparte con su propio import.
+'
+' Tambien adopto aqui un hallazgo de codigo de Valeria que a mi se me
+' habia escapado: ella confirmo en EViews real que el test de Johansen
+' SI se puede correr por linea de comandos sin abrir el dialogo,
+' siempre que se llame como VISTA de un objeto VAR/VEC ya creado
+' (sintaxis "vec_objeto.coint(c, rezago_lo, rezago_hi)", con "c" =
+' Caso 3/unrestricted constant y "b" = Caso 2/restricted constant como
+' codigo de tendencia) -- distinto de lo que yo probe en la Seccion 3
+' (".coint()" sobre un GROUP, no sobre un VAR/VEC, que fallaba con
+' "COINT command requires trend specification option"). No la vuelvo
+' a probar yo mismo por el tiempo que queda antes de la entrega, pero
+' la dejo documentada aqui (confirmada por Valeria, no por mi en vivo)
+' porque de funcionar reemplazaria el procedimiento manual del Anexo
+' B.1 para toda futura extension de este trabajo.
+' ============================================================
+
+smpl 2010m08 2020m02
+
+' --- 8.1 Graficos 1 y 2 (pre-pandemia): ya exportados por Valeria y
+' Andrea como grafico1_ext_pre.png / grafico2_ext_pre.png (Anexo,
+' figures/) -- no los regenero aqui, solo calculo r y prob para que
+' quede en el .prg el mismo numero que aparece en su informe.
+for %s R1_pref90 R2_corp_cp R3_ge_cp R4_me_cp R5_corp_lp R6_ge_lp R7_me_lp R8_tamn R9_ftamn
+  scalar r_{%s}_pre = @cor(RP_ref,{%s})
+  scalar n_{%s}_pre = @obs({%s})
+  scalar t_{%s}_pre = r_{%s}_pre*@sqrt(n_{%s}_pre-2)/@sqrt(1-r_{%s}_pre^2)
+  scalar prob_{%s}_pre = 2*(1-@ctdist(@abs(t_{%s}_pre),n_{%s}_pre-2))
+next
+
+' Verificado por Valeria/Andrea en EViews real (114 obs., ago.2010-feb.2020):
+'   R1=0.879(p=0.000) R2=0.899(p=0.000) R3=0.771(p=0.000) R4=0.591(p=3.7E-12)
+'   R5=0.320(p=4.9E-04) R6=0.233(p=0.012) R7=0.642(p=1.1E-14) R8=0.709(p=0.000)
+'   R9=0.496(p=1.8E-08)
+' Frente a la muestra completa (Seccion 1), TAMN y FTAMN correlacionan
+' bastante MAS con RP_ref en el periodo pre-pandemia (R8: 0.709 vs 0.371;
+' R9: 0.496 vs 0.793 -- este ultimo al reves) -- consistente con que la
+' muestra completa esta dominada por el ciclo de alza sincronizado
+' 2021-2023, que infla la correlacion lineal simple entre todas las series.
+
+' --- 8.2 Cuadro 2 (pre-pandemia): raiz unitaria, mismo criterio que
+' la Seccion 2 (DF-GLS en niveles, ADF sin deterministicos en diferencias)
+for %s RP_ref R1_pref90 R2_corp_cp R3_ge_cp R4_me_cp R5_corp_lp R6_ge_lp R7_me_lp R8_tamn R9_ftamn
+  freeze(tab_ur_{%s}_pre_niv) {%s}.uroot(dfgls,const,info=sic)
+  freeze(tab_ur_{%s}_pre_dif) d_{%s}.uroot(adf,none,info=sic)
+next
+' (d_{%s} ya existe de la Seccion 2 -- es la misma serie en diferencias,
+' solo se reestima la prueba sobre la muestra recortada.)
+
+' --- 8.3 Cuadro 3 (pre-pandemia): cointegracion, con el rezago del VAR
+' seleccionado automaticamente por Schwarz (idea de Valeria/Andrea) en
+' vez de fijarlo a mano -- reemplaza mi propia tabla "N calibrado por
+' serie" de la Seccion 3, pero SOLO para esta submuestra (dejo la
+' Seccion 3 de muestra completa tal como esta, ya verificada).
+!maxlag_pre = 12
+for %s R1_pref90 R2_corp_cp R3_ge_cp R4_me_cp R5_corp_lp R6_ge_lp R7_me_lp R8_tamn R9_ftamn
+
+  equation eq_fmols_{%s}_pre.cointreg(method=fmols,trend=c) {%s} RP_ref
+  eq_fmols_{%s}_pre.makeresid u_{%s}_pre
+  freeze(tab_eg_{%s}_pre) u_{%s}_pre.uroot(adf,none,info=sic)
+
+  group gv_{%s}_pre {%s} RP_ref
+  scalar bestsc_{%s}_pre = na
+  scalar bestlag_{%s}_pre = 1
+  for !k = 1 to !maxlag_pre
+    var vartmp.ls 1 !k gv_{%s}_pre
+    scalar sc_now = vartmp.@schwarz
+    if @isna(bestsc_{%s}_pre) or sc_now < bestsc_{%s}_pre then
+      bestsc_{%s}_pre = sc_now
+      bestlag_{%s}_pre = !k
+    endif
+    delete vartmp
+  next
+  scalar rezagos_{%s}_pre = bestlag_{%s}_pre
+
+  !difhigh_pre = bestlag_{%s}_pre - 1
+  if !difhigh_pre < 1 then
+    !difhigh_pre = 1
+  endif
+
+  ' Caso 3 (unrestricted constant) -- especificacion principal de
+  ' Valeria/Andrea para Pregunta 2, distinta del Caso 2 que uso yo en
+  ' la Seccion 3/5 de muestra completa (ver nota de reconciliacion en
+  ' content.tex, Seccion 2.2: mantengo Caso 2 como el caso PRINCIPAL de
+  ' todo este trabajo porque es el que reproduce EXACTO los 18 valores
+  ' del Cuadro 3 del paper en la Pregunta 1 -- pero reporto aqui el
+  ' Caso 3 de Valeria/Andrea integro, tal como ellas lo verificaron,
+  ' como pieza de evidencia adicional sobre la submuestra pre-pandemia).
+  var vec_{%s}_pre.ec(1) 1 !difhigh_pre gv_{%s}_pre
+  freeze(tab_joh_{%s}_pre_c3) vec_{%s}_pre.coint(c, 1 !difhigh_pre)
+
+  ' Caso 2 (restricted constant), mismo rezago, como robustez adicional
+  var vec_{%s}_c2_pre.ec(1,b) 1 !difhigh_pre gv_{%s}_pre
+  freeze(tab_joh_{%s}_pre_c2) vec_{%s}_c2_pre.coint(b, 1 !difhigh_pre)
+next
+
+' Verificado por Valeria/Andrea en EViews real -- rezagos por Schwarz
+' (114 obs.): R1=3 R2=3 R3=3 R4=4 R5=1 R6=4 R7=4 R8=3 R9=3
+' Traza Johansen H0:r=0 (Caso3 / Caso2):
+'   R1: 14.49/0.070  15.14->NO, R1=14.49(p=0.070) / 14.80(p=0.238)
+'   R2: 12.48(p=0.135) / 12.75(p=0.384)
+'   R3: 7.98(p=0.467) / 8.23(p=0.805)
+'   R4: 15.17(p=0.056) / 15.94(p=0.177)
+'   R5: 32.48(p=0.0001) / 33.07(p=0.0005)
+'   R6: 21.74(p=0.0050) / 23.93(p=0.0149)
+'   R7: 8.85(p=0.379) / 11.10(p=0.533)
+'   R8: 10.61(p=0.236) / 12.13(p=0.437)
+'   R9: 6.98(p=0.580) / 7.38(p=0.872)
+' Con una muestra mas corta (114 obs. vs 191), la potencia del test cae:
+' R2,R3,R7,R8,R9 dejan de rechazar H0 al 5% bajo ambos casos, cuando
+' algunas si rechazaban en la muestra completa -- esperable, no es un
+' error, es perdida de poder estadistico por tener menos datos.
+
+' --- 8.4 Cuadro 4 (pre-pandemia): MCE lineal, mismo enfoque general de
+' la Seccion 4 pero con la especificacion simple de Valeria/Andrea
+' (c, ECT(-1), d(RP) contemporaneo, d(Ri)(-1)) en vez de mi poda
+' especifica por serie -- dejo ambas visibles porque cada una responde
+' a un objetivo distinto (la mia busca el modelo parsimonioso optimo
+' por serie; esta busca comparabilidad directa entre muestra completa
+' y pre-pandemia con la MISMA especificacion en los dos casos).
+for %s R1_pref90 R2_corp_cp R3_ge_cp R4_me_cp R5_corp_lp R6_ge_lp R7_me_lp R8_tamn R9_ftamn
+  equation eq_mce_{%s}_pre.ls d({%s}) c u_{%s}_pre(-1) d(RP_ref) d({%s}(-1))
+  scalar beta1_{%s}_pre  = eq_fmols_{%s}_pre.@coefs(1)
+  scalar alpha_{%s}_pre  = eq_mce_{%s}_pre.@coefs(2)
+  scalar theta0_{%s}_pre = eq_mce_{%s}_pre.@coefs(3)
+  scalar promedio_{%s}_pre = -(beta1_{%s}_pre-theta0_{%s}_pre)/(beta1_{%s}_pre*alpha_{%s}_pre)
+next
+
+' Verificado por Valeria/Andrea en EViews real (114 obs.), beta1(SE) / alpha(SE) / Promedio:
+'   R1: 0.855(0.088) / -0.146(0.040) / 0.77    R2: 1.057(0.096) / -0.136(0.032) / 5.05
+'   R3: 0.665(0.078) / -0.200(0.032) / 4.30    R4: 0.452(0.087) / -0.234(0.047) / 3.30
+'   R5: 0.297(0.111) / -0.052(0.018) / 17.02   R6: 0.176(0.101) / -0.068(0.015) / 7.00
+'   R7: 0.485(0.118) / -0.031(0.025,NO sig.) / 21.76 (fragil, alpha no significativo)
+'   R8: 1.927(0.340) / -0.024(0.019,NO sig.) / 37.70 (fragil, alpha no significativo)
+'   R9: 0.959(0.310) / -0.222(0.064) / 4.46
+
+' --- 8.5 Cuadro 5 (pre-pandemia): VECM, Caso 3 principal (Valeria/
+' Andrea) + Caso 2 robustez, reutilizando vec_{%s}_pre / vec_{%s}_c2_pre
+' ya estimados en 8.3 -- mismo principio de "no re-estimar el mismo
+' sistema dos veces" que ellas aplicaron en su propio .prg.
+for %s R1_pref90 R2_corp_cp R3_ge_cp R4_me_cp R5_corp_lp R6_ge_lp R7_me_lp R8_tamn R9_ftamn
+  freeze(tab_vec_{%s}_pre_c3) vec_{%s}_pre.output
+  freeze(tab_vec_{%s}_pre_c2) vec_{%s}_c2_pre.output
+next
+
+' Verificado por Valeria/Andrea en EViews real -- beta1/alpha (Caso3):
+'   R1: 0.689/-0.132  R2: 0.922/-0.099  R3: 0.728/-0.075  R4: 0.358/-0.194
+'   R5: 0.684/-0.065  R6: 0.139/-0.057  R7: 1.035/-0.029  R8: 2.397/-0.034
+'   R9: 1.415/-0.145
+' *** HALLAZGO CLAVE, cruzado con mi propia Seccion 6: en esta submuestra
+' pre-pandemia, R6 (beta1=0.139) y R7 (beta1=1.035) recuperan signo
+' correcto y magnitud economicamente sensata -- muy distinto del
+' patron "roto" que ambas dan en el VECM de muestra completa (R6: b1=
+' -3.55 a -12.8 segun el caso; R7: b1=-6.66, ver Seccion 5). Esto
+' confirma, por una via COMPLETAMENTE independiente a la mia (un corte
+' de muestra fijo por fecha de pandemia, no un sup-F estimado), el
+' mismo diagnostico que documento en la Seccion 6: la inestabilidad de
+' R6 y R7 en el VECM de muestra completa es real y esta ligada a la
+' pandemia/ciclo de alza 2021-2023, no es un artefacto de mi propio
+' analisis de quiebre. Dos metodologias distintas (sup-F propio vs.
+' corte fijo de Valeria/Andrea) llegando a la misma conclusion es la
+' evidencia mas solida que tengo en todo este trabajo de que el
+' hallazgo de R6/R7 es real.
+
+smpl @all
+
 save tasas_interes_lahura2017_ext_resultados
 ' ============================================================
 ' FIN. Datos: data/tasas_interes_lahura2017_ext.xlsx (191 obs.,
@@ -910,4 +1093,10 @@ save tasas_interes_lahura2017_ext_resultados
 ' Python sobre exactamente estos mismos datos antes de escribir el
 ' codigo EViews de arriba -- pendiente de una corrida real en EViews
 ' para confirmacion final si el tiempo antes de la entrega lo permite.
+' La Seccion 8 (submuestra pre-pandemia) es aporte de Valeria Aviles y
+' Andrea Quispe, integrada aqui con mi propia nomenclatura de series;
+' sus numeros estan confirmados en EViews real por ellas (ver su
+' informe, Pregunta2_Informe.tex/pdf, y el .prg original en
+' template/pregunta_2/), no simulados en Python como el resto de este
+' archivo.
 ' ============================================================

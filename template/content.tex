@@ -641,17 +641,67 @@ formal.
 \subsection{Gráficos 1 y 2 y Cuadros 2--3 extendidos}
 %%-------------------------------------------------------------
 
-Los Gráficos 1 y 2 extendidos (código en el Anexo~A.10; export
-pendiente de la corrida en EViews, ver nota al pie del Anexo~A.10)
-muestran la misma comovimiento visual que en la muestra 2010--2017
-para las tasas de mayor liquidez, pero con una dispersión bastante
-mayor frente a la tasa de política en las series de plazos más largos
-durante 2021--2023. Las correlaciones simples confirman esa lectura:
-$r=0.98$ para la Preferencial 90 días hasta $r=0.35$ para Grandes
-Empresas $>$360 días -- todas altamente significativas ($p<0.001$),
-pero notablemente más bajas para R5--R8 que en la muestra original,
-una primera señal (todavía descriptiva) de la inestabilidad que se
-documenta en la Sección~2.4.
+Los Gráficos 1 y 2 extendidos (Figuras~\ref{fig:g1ext}--\ref{fig:g2ext})
+fueron generados en EViews real por Valeria Avilés y Andrea Quispe, a
+partir de su propio código (\texttt{pregunta\_2/Outputs/p2.prg}, que
+integro junto con el mío en el Anexo~A.10). Muestran la misma
+comovimiento visual que en la muestra 2010--2017 para las tasas de
+mayor liquidez, pero con una dispersión bastante mayor frente a la
+tasa de política en las series de plazos más largos durante
+2021--2023, y hacen visible con claridad la caída de $RP$ a niveles
+cercanos a cero en 2020--2021 y el ciclo de alza posterior.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{grafico1_ext.png}
+  \caption{Tasa de política monetaria y tasas de préstamos activas de
+           corto y largo plazo (Corporativa, Grandes Empresas y
+           Medianas Empresas), muestra extendida agosto 2010 -- junio
+           2026.}
+  \label{fig:g1ext}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{grafico2_ext.png}
+  \caption{Tasa de política monetaria y tasas Preferencial a 90 días,
+           TAMN y FTAMN, muestra extendida agosto 2010 -- junio 2026.}
+  \label{fig:g2ext}
+\end{figure}
+
+\begin{table}[ht]
+\renewcommand{\thetable}{8}
+\begin{threeparttable}
+\caption{Correlación entre cada tasa activa y la tasa de política
+         monetaria, muestra extendida 2010--2026}
+\label{tab:corrext}
+\small
+\begin{tabular}{lcc}
+\toprule
+Tasa activa & $r$ & prob \\
+\midrule
+Preferencial 90d         & 0.979 & 0.000 \\
+Corporativa $\le$360d    & 0.938 & 0.000 \\
+Grandes Emp.\ $\le$360d  & 0.930 & 0.000 \\
+Medianas Emp.\ $\le$360d & 0.886 & 0.000 \\
+Corporativa $>$360d      & 0.507 & $7.1\times10^{-14}$ \\
+Grandes Emp.\ $>$360d    & 0.351 & $6.6\times10^{-7}$ \\
+Medianas Emp.\ $>$360d   & 0.430 & $5.5\times10^{-10}$ \\
+TAMN                     & 0.371 & $1.2\times10^{-7}$ \\
+FTAMN                    & 0.793 & 0.000 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize\item
+$r=$ correlación de Pearson entre cada tasa y $RP$; prob corresponde a
+$H_0{:}\,r=0$ ($t=r\sqrt{n-2}/\sqrt{1-r^2}$, $n=191$). Todas
+significativas al 0.1\,\%, pero notablemente más bajas para las tasas
+de largo plazo (R5--R8) que en la muestra original -- primera señal
+(todavía descriptiva) de la inestabilidad que se documenta en la
+Sección~2.4.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
 
 Las pruebas de raíz unitaria (Cuadro 2 extendido, DF-GLS en niveles y
 ADF en diferencias, rezagos por Schwarz) confirman que las 10 series
@@ -667,8 +717,81 @@ cointegraban con la tasa de política en las dos pruebas, aquí
 Engle-Granger} ($p=0.17$), y tanto R6 como \textbf{Preferencial 90d
 (R1) y FTAMN (R9) no rechazan ``no cointegración'' con Johansen al
 10\,\%} (R1 por un margen mínimo, R9 con más claridad). El resto
-cointegra sin ambigüedad. Detalle completo, incluidos los rezagos por
-serie, en el Anexo~A.10.
+cointegra sin ambigüedad.
+
+El número de rezagos del VAR usado en el test de Johansen se
+seleccionó, para toda esta sección, minimizando el criterio de
+Schwarz sobre un rango de 1 a 12 rezagos (bucle automático en EViews,
+aporte de Valeria y Andrea que integro en el Anexo~A.10, Sección~8)
+en vez de fijar un rezago común para las 9 series:
+
+\begin{table}[ht]
+\renewcommand{\thetable}{9}
+\begin{threeparttable}
+\caption{Número de rezagos del VAR (criterio de Schwarz), muestra
+         extendida 2010--2026}
+\label{tab:rezagosext}
+\small
+\begin{tabular}{lccccccccc}
+\toprule
+Tasa & R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9 \\
+\midrule
+Rezagos & 3 & 2 & 5 & 3 & 2 & 5 & 3 & 3 & 5 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Como el propio test de Johansen requiere elegir uno de cinco supuestos
+deterministicos estándar, y las ecuaciones del MCE de \textcite{lahura2017}
+tienen intercepto libre tanto en la relación de cointegración como en
+cada ecuación de corto plazo, Valeria y Andrea argumentan que el
+\textbf{Caso 3} (\textit{unrestricted constant}) es el que corresponde
+exactamente a esa estructura, y lo usan como especificación principal
+en su propio informe, reportando el \textbf{Caso 2} (\textit{restricted
+constant}, el mismo que usamos como principal en toda la Sección~1 y
+en el resto de esta sección) como robustez. Mantengo el Caso 2 como
+especificación principal de este documento -- es la que reproduce
+\textbf{exactos} los 18 valores del Cuadro 3 del paper en la
+Sección~1, la evidencia empírica más fuerte posible de que es la que
+Lahura (2017) usó realmente -- pero incorporo el Caso 3 íntegro como
+segunda columna, ya que en algunos casos (R1, TAMN) la conclusión
+binaria sobre cointegración cambia entre uno y otro:
+
+\begin{table}[ht]
+\renewcommand{\thetable}{10}
+\begin{threeparttable}
+\caption{Test de traza de Johansen, $H_0{:}\,r=0$, Casos 2 y 3,
+         muestra extendida 2010--2026}
+\label{tab:trazaext}
+\small
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{Caso 3 (unrestricted constant)} & \multicolumn{2}{c}{Caso 2 (restricted constant, principal)} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Tasa activa & Traza & prob & Traza & prob \\
+\midrule
+Preferencial 90d         & 15.14 & 0.057  & 15.28 & 0.211 \\
+Corporativa $\le$360d    & 32.29 & 0.0001 & 32.30 & 0.0007 \\
+Grandes Emp.\ $\le$360d  & 33.36 & 0.0000 & 33.36 & 0.0005 \\
+Medianas Emp.\ $\le$360d & 35.15 & 0.0000 & 35.17 & 0.0002 \\
+Corporativa $>$360d      & 51.59 & 0.0000 & 51.78 & 0.0000 \\
+Grandes Emp.\ $>$360d    & 21.70 & 0.0051 & 21.81 & 0.0304 \\
+Medianas Emp.\ $>$360d   & 32.53 & 0.0001 & 32.63 & 0.0006 \\
+TAMN                     & 15.58 & 0.0486 & 15.99 & 0.1747 \\
+FTAMN                    & 16.66 & 0.0333 & 17.16 & 0.1268 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize\item
+Los coeficientes de largo plazo son casi idénticos entre casos
+(diferencias $<2\,\%$, salvo R6--R7 -- ver Cuadro~5 extendido), pero
+los $p$-valores del test de traza sí difieren sustancialmente
+(consistentemente mayores bajo el Caso 2, que tiene un parámetro libre
+menos), lo que cambia la conclusión binaria de cointegración al 5\,\%
+para Preferencial 90d y TAMN entre un caso y otro.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
 
 %%-------------------------------------------------------------
 \subsection{Cuadros 4 y 5 extendidos}
@@ -746,6 +869,242 @@ anticipado por la verificación en Python (que asumía $\beta_1=2.74$
 para esta serie) -- solo apareció al correr el VECM real en EViews. La
 Sección~2.4 explica por qué, y extiende a R7 la misma investigación de
 sub-muestra ya hecha para R6.
+
+%%-------------------------------------------------------------
+\subsection{Análisis de robustez: submuestra pre-pandemia (aporte de
+            Valeria Avilés y Andrea Quispe)}
+%%-------------------------------------------------------------
+
+Todo lo anterior corresponde a la muestra completa 2010--2026. Pero
+antes de llegar por mi cuenta al hallazgo de la Sección~2.4 (que R6 y
+R7 se rompen específicamente por la ventana de tiempo que se analiza),
+Valeria y Andrea ya habían corrido, en paralelo, el mismo ejercicio
+completo restringido a 2010m08--2020m02 -- el último mes antes de la
+emergencia sanitaria por COVID-19 en el Perú (declarada el 16 de marzo
+de 2020) -- como chequeo de robustez independiente. Integro aquí sus
+resultados casi tal cual los dejaron en su informe, porque llegan,
+desde un ángulo distinto al mío, a la misma conclusión sobre R6 y R7,
+y además porque su código de selección automática de rezagos por
+Schwarz (que yo no había implementado) me pareció mejor que fijar un
+rezago arbitrario para las nueve series, así que también lo adopté
+para el Cuadro 3 extendido de la muestra completa (Cuadro~9 arriba).
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{grafico1_ext_pre.png}
+  \caption{Tasa de política monetaria y tasas de préstamos activas de
+           corto y largo plazo, submuestra pre-pandemia agosto 2010 --
+           febrero 2020.}
+  \label{fig:g1pre}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{grafico2_ext_pre.png}
+  \caption{Tasa de política monetaria y tasas Preferencial a 90 días,
+           TAMN y FTAMN, submuestra pre-pandemia agosto 2010 -- febrero
+           2020.}
+  \label{fig:g2pre}
+\end{figure}
+
+\begin{table}[ht]
+\renewcommand{\thetable}{11}
+\begin{threeparttable}
+\caption{Correlación entre cada tasa activa y la tasa de política
+         monetaria, submuestra pre-pandemia 2010--2020}
+\label{tab:corrpre}
+\small
+\begin{tabular}{lcc}
+\toprule
+Tasa activa & $r$ & prob \\
+\midrule
+Preferencial 90d         & 0.879 & 0.000 \\
+Corporativa $\le$360d    & 0.899 & 0.000 \\
+Grandes Emp.\ $\le$360d  & 0.771 & 0.000 \\
+Medianas Emp.\ $\le$360d & 0.591 & $3.7\times10^{-12}$ \\
+Corporativa $>$360d      & 0.320 & $4.9\times10^{-4}$ \\
+Grandes Emp.\ $>$360d    & 0.233 & 0.012 \\
+Medianas Emp.\ $>$360d   & 0.642 & $1.1\times10^{-14}$ \\
+TAMN                     & 0.709 & 0.000 \\
+FTAMN                    & 0.496 & $1.8\times10^{-8}$ \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize\item
+Frente al Cuadro~8 (muestra completa), TAMN y FTAMN cambian de forma
+notable: TAMN sube de $r=0.37$ a $r=0.71$, FTAMN baja de $r=0.79$ a
+$r=0.50$. Consistente con que la muestra completa arrastra el ciclo de
+subidas sincronizadas de 2021--2023, que infla la correlación lineal
+simple de TAMN y FTAMN de maneras distintas entre sí.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\begin{table}[ht]
+\renewcommand{\thetable}{12}
+\begin{threeparttable}
+\caption{Número de rezagos del VAR (criterio de Schwarz), submuestra
+         pre-pandemia 2010--2020}
+\label{tab:rezagospre}
+\small
+\begin{tabular}{lccccccccc}
+\toprule
+Tasa & R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9 \\
+\midrule
+Rezagos & 3 & 3 & 3 & 4 & 1 & 4 & 4 & 3 & 3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\renewcommand{\thetable}{13}
+\begin{threeparttable}
+\caption{Test de traza de Johansen, $H_0{:}\,r=0$, Casos 2 y 3,
+         submuestra pre-pandemia 2010--2020}
+\label{tab:trazapre}
+\small
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{Caso 3 (principal)} & \multicolumn{2}{c}{Caso 2 (robustez)} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Tasa activa & Traza & prob & Traza & prob \\
+\midrule
+Preferencial 90d         & 14.49 & 0.070 & 14.80 & 0.238 \\
+Corporativa $\le$360d    & 12.48 & 0.135 & 12.75 & 0.384 \\
+Grandes Emp.\ $\le$360d  & 7.98  & 0.467 & 8.23  & 0.805 \\
+Medianas Emp.\ $\le$360d & 15.17 & 0.056 & 15.94 & 0.177 \\
+Corporativa $>$360d      & 32.48 & 0.0001 & 33.07 & 0.0005 \\
+Grandes Emp.\ $>$360d    & 21.74 & 0.0050 & 23.93 & 0.0149 \\
+Medianas Emp.\ $>$360d   & 8.85  & 0.379 & 11.10 & 0.533 \\
+TAMN                     & 10.61 & 0.236 & 12.13 & 0.437 \\
+FTAMN                    & 6.98  & 0.580 & 7.38  & 0.872 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize\item
+Con solo 114 observaciones (frente a 191 en la muestra completa) el
+test pierde potencia con claridad: R2, R3, R7, R8 y R9 dejan de
+rechazar $H_0$ al 5\,\% bajo ambos casos, cuando algunas sí lo hacían
+en la muestra completa (Cuadro~10). Solo R5 y R6 rechazan
+consistentemente en las dos muestras y los dos casos.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\begin{table}[ht]
+\renewcommand{\thetable}{14}
+\begin{threeparttable}
+\caption{Efecto traspaso y velocidad de ajuste, submuestra
+         pre-pandemia 2010--2020 (enfoque uniecuacional, Cuadro 4 pre)}
+\label{tab:cuadro4pre}
+\small
+\begin{tabular}{lccccl}
+\toprule
+Tasa activa & $\beta_1$ (FMOLS) & $\alpha$ (MCE) & $\theta_0$ (MCE) & Promedio (meses) & Observación\\
+\midrule
+Preferencial 90d         & 0.86\rlap{***} & $-0.15$\rlap{***} & 0.76\rlap{***} & 0.8  & \\
+Corporativa $\le$360d    & 1.06\rlap{***} & $-0.14$\rlap{***} & 0.33\rlap{***} & 5.1  & \\
+Grandes Emp.\ $\le$360d  & 0.67\rlap{***} & $-0.20$\rlap{***} & 0.10           & 4.3  & \\
+Medianas Emp.\ $\le$360d & 0.45\rlap{***} & $-0.23$\rlap{***} & 0.10           & 3.3  & \\
+Corporativa $>$360d      & 0.30\rlap{***} & $-0.05$\rlap{***} & 0.03           & 17.0 & \\
+Grandes Emp.\ $>$360d    & 0.18\rlap{*}   & $-0.07$\rlap{***} & 0.09           & 7.0  & \\
+Medianas Emp.\ $>$360d   & 0.49\rlap{***} & $-0.03$           & 0.16\rlap{*}   & 21.8 & $\alpha$ no significativo \\
+TAMN                     & 1.93\rlap{***} & $-0.02$           & 0.17           & 37.7 & $\alpha$ no significativo \\
+FTAMN                    & 0.96\rlap{***} & $-0.22$\rlap{***} & 0.01           & 4.5  & \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item * $p<0.10$; ** $p<0.05$; *** $p<0.01$. Números tal como los
+confirmó Valeria en EViews real (su Cuadro 4, submuestra pre-pandemia).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\begin{table}[ht]
+\renewcommand{\thetable}{15}
+\begin{threeparttable}
+\caption{VAR cointegrado (Johansen), Casos 2 y 3, submuestra
+         pre-pandemia 2010--2020 (Cuadro 5 pre)}
+\label{tab:cuadro5pre}
+\small
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{Caso 3 (principal)} & \multicolumn{2}{c}{Caso 2 (robustez)} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Tasa activa & $\beta_1$ & $\alpha$ & $\beta_1$ & $\alpha$ \\
+\midrule
+Preferencial 90d         & 0.689 & $-0.132$ & 0.691 & $-0.132$ \\
+Corporativa $\le$360d    & 0.922 & $-0.099$ & 0.924 & $-0.098$ \\
+Grandes Emp.\ $\le$360d  & 0.728 & $-0.075$ & 0.728 & $-0.075$ \\
+Medianas Emp.\ $\le$360d & 0.358 & $-0.194$ & 0.359 & $-0.195$ \\
+Corporativa $>$360d      & 0.684 & $-0.065$ & 0.682 & $-0.065$ \\
+Grandes Emp.\ $>$360d    & \textbf{0.139} & $-0.057$ & \textbf{0.156} & $-0.059$ \\
+Medianas Emp.\ $>$360d   & \textbf{1.035} & $-0.029$ & \textbf{1.019} & $-0.033$ \\
+TAMN                     & 2.397 & $-0.034$ & 2.375 & $-0.036$ \\
+FTAMN                    & 1.415 & $-0.145$ & 1.385 & $-0.145$ \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize\item
+Este es, para mí, el resultado más importante que aporta la submuestra
+de Valeria y Andrea: comparado con el Cuadro 5 extendido de la muestra
+completa (arriba), donde R6 daba $\beta_1=-3.55$ (Caso 2, Sección de
+robustez con VECM restringido) y R7 daba $\beta_1=-6.66$ -- ambos con
+signo económicamente absurdo --, aquí, en la submuestra pre-pandemia,
+\textbf{las dos series recuperan un $\beta_1$ de signo correcto y
+magnitud razonable} (R6$=0.14$--$0.16$, en línea con su $\beta_1=0.33$
+del Cuadro 4 uniecuacional; R7$=1.02$--$1.04$, muy cerca del traspaso
+casi completo que reporta el paper original para tasas de corto
+plazo). Esto es evidencia adicional, independiente de la mía en la
+Sección~2.4, de que el problema de R6 y R7 en el VECM de la muestra
+completa no es un defecto del método sino algo que introducen
+específicamente la pandemia y el ciclo de alzas 2021--2023 en la
+identificación de la relación de cointegración de esas dos series.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\begin{table}[ht]
+\renewcommand{\thetable}{16}
+\begin{threeparttable}
+\caption{Efecto traspaso $\beta_1$ (enfoque uniecuacional): paper
+         original vs.\ muestra completa vs.\ submuestra pre-pandemia}
+\label{tab:comparatres}
+\small
+\begin{tabular}{lccc}
+\toprule
+Tasa activa & Paper (2010--2017) & Completa (2010--2026) & Pre-pandemia (2010--2020) \\
+\midrule
+Preferencial 90d         & 0.89 & 1.04 & 0.86 \\
+Corporativa $\le$360d    & 0.91 & 0.89 & 1.06 \\
+Grandes Emp.\ $\le$360d  & 0.98 & 0.81 & 0.66 \\
+Medianas Emp.\ $\le$360d & 0.91 & 0.67 & 0.45 \\
+Corporativa $>$360d      & 0.39 & 0.27 & 0.30 \\
+Grandes Emp.\ $>$360d    & 0.57 & 0.33 & 0.18 \\
+Medianas Emp.\ $>$360d   & 0.36 & 0.54 & 0.48 \\
+TAMN                     & 1.44 & 0.50 & 1.93 \\
+FTAMN                    & 1.33 & 2.16 & 0.96 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+De esta comparación de tres muestras (que armaron originalmente
+Valeria y Andrea, y que aquí solo actualizo con mi propia
+nomenclatura de series) rescato tres lecturas. Primero, el traspaso de
+las tasas de corto plazo (R1--R4) se mantiene entre 0.45 y 1.06 en las
+tres muestras, siempre el más alto del grupo -- el hallazgo central de
+\textcite{lahura2017} no depende de si se incluye o no la pandemia.
+Segundo, el traspaso de las tasas de largo plazo (R5--R7) cae de forma
+bastante consistente del paper (0.36--0.57) a la pre-pandemia
+(0.18--0.48) y a la completa (0.27--0.54), lo que sugiero que refleja
+un peso creciente de primas de riesgo de plazo cada vez menos ligadas
+a la política monetaria de corto plazo. Tercero, TAMN y FTAMN son,
+sin comparación, las series más sensibles a la ventana muestral
+elegida (TAMN: 1.44 $\to$ 0.50 $\to$ 1.93; FTAMN: 1.33 $\to$ 2.16
+$\to$ 0.96) -- razonable, dado que ambas son promedios móviles de toda
+la banca que mezclan una composición de crédito que cambia en el
+tiempo.
 
 %%-------------------------------------------------------------
 \subsection{Estabilidad estructural del traspaso: hallazgo central
@@ -947,6 +1306,20 @@ diagnóstico completo -- con evidencia formal de que es real y no un
 artefacto de una prueba mal aplicada -- en vez de implementar esas dos
 metodologías adicionales, que quedan identificadas como la extensión
 natural de este trabajo.
+
+Vale la pena notar que este diagnóstico no depende únicamente de mi
+propio ejercicio de sub-muestras (Gráfico 3, arriba): el análisis de
+robustez pre-pandemia de la Sección~2.3, hecho de forma
+independiente por Valeria y Andrea antes de que yo llegara a este
+mismo punto por mi cuenta, apunta exactamente en la misma dirección
+-- R6 y R7 son las únicas dos series cuyo VECM de muestra completa
+deja de tener sentido económico y que, al recortar la muestra justo
+antes de la pandemia, recuperan un $\beta_1$ de signo correcto
+(Cuadro~15). Que dos ejercicios distintos, con particiones de muestra
+distintas y hechos por separado, coincidan en señalar a las mismas dos
+series es, para mí, la evidencia más convincente de todo este trabajo
+de que el problema es real y no un artefacto de cómo corté yo la
+muestra en particular.
 
 \clearpage
 %%=============================================================

@@ -157,4 +157,44 @@ documento).
 | Cuadro 3 (cointegración) | 6/9 sin ambigüedad | Grandes Empresas >360d (R6) deja de cointegrar por Engle-Granger; R6, Preferencial 90d y FTAMN no rechazan "no cointegración" por Johansen al 10% — primera señal de la inestabilidad de la Sección 2.4 |
 | Cuadro 4 extendido (MCE lineal) | 6/9 con α claramente significativo | Grandes/Medianas Empresas >360d y TAMN tienen α marginal o no significativo — el "Promedio (meses)" de esas 3 filas se reporta entre paréntesis con advertencia explícita |
 | Cuadro 5 extendido (VAR cointegrado) | 8/9 interpretables | Grandes Empresas >360d (R6) no converge a un resultado con sentido económico — diagnosticado como un quiebre en el propio vector de cointegración, no un error de estimación (ver Sección 2.4) |
-| **E
+| **Estabilidad estructural (extensión más allá de Lahura 2017)** | 6/9 series con quiebre confirmado | Primera versión del test (Quandt-Andrews sobre la regresión de niveles) era metodológicamente inválida por regresores I(1); corregida reubicando el test en la ecuación de corto plazo del MCE (regresores I(0) por construcción), donde la teoría de Andrews (1993) sí aplica. Ver Sección 2.4 y Anexo A.10 |
+
+Todos los valores fueron calculados y verificados en Python sobre los mismos 191 datos antes
+de escribir el código EViews; quedan pendientes de una corrida final en EViews real si el
+tiempo antes de la entrega lo permite (mismo estándar de transparencia que la Pregunta 1). La
+extensión más allá del marco de Lahura (2017) — el hallazgo de inestabilidad estructural del
+traspaso durante 2020–2023 y su corrección metodológica — está documentada con rigor completo
+en la Sección 2.4 del documento, incluyendo las dos metodologías identificadas (pero no
+implementadas por alcance/tiempo) para un tratamiento aún más riguroso: Gregory-Hansen (1996)
+y Johansen-Mosconi-Nielsen (2000) para cointegración con quiebre endógeno.
+
+## Cómo reproducir
+
+1. **Datos:** correr `data/bcrp_series.ipynb` (Python 3, `pandas`/`requests`) para descargar
+   el panel de la Pregunta 1 desde la API del BCRP, o usar directamente
+   `data/tasas_interes_lahura2017.xlsx` ya generado. Para la Pregunta 2, correr
+   `data/bcrp_series_p2.py` (mismo pipeline, muestra ago.2010–jun.2026) o usar directamente
+   `data/tasas_interes_lahura2017_ext.xlsx`.
+2. **EViews:** importar el panel correspondiente en EViews 12 (`File → Import`, frecuencia
+   mensual, inicio `2010m08`) o abrir directamente `data/tasas_interes_lahura2017.wf1` (P1).
+   Correr los scripts de `codes/` en el orden A.1–A.9 (Pregunta 1) y luego A.10
+   (`P2_1_extension_completa.prg`, Pregunta 2) indicado en el Anexo A del documento (cada uno
+   declara su prerrequisito en el encabezado). Los pasos sin equivalente por línea de comandos
+   (pruebas de Johansen, restricciones VEC, ejes duales en gráficos) están documentados como
+   procedimiento manual en el Anexo B.
+3. **Documento:** compilar `template/content.tex` en Overleaf (requiere `biblatex`+`biber` y
+   el paquete de idioma `babel[spanish]`), manteniendo `codes/` y `template/figures/` como
+   carpetas hermanas/hijas según la estructura de arriba.
+
+## Referencia del paper replicado
+
+Lahura, E. (2017). El efecto traspaso de la tasa de interés de política monetaria en Perú:
+Evidencia reciente. *Revista Estudios Económicos*, 33, 9–27. BCRP.
+<https://www.bcrp.gob.pe/docs/Publicaciones/Revista-Estudios-Economicos/33/ree-33-lahura.pdf>
+
+## Autoría y licencia
+
+Trabajo académico elaborado para el curso Econometría Intermedia: Macro (2026-1, PUCP).
+Uso restringido a fines de evaluación del curso; no se otorga licencia de reutilización sobre
+el análisis, el código o el documento sin autorización de los autores.
+
