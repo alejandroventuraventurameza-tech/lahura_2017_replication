@@ -342,11 +342,15 @@ show eq_mce_R6_ge_lp.output
 ' --- R7_me_lp ---
 equation eq_mce_R7_me_lp.ls(cov=hac) d_R7_me_lp u_R7_me_lp(-1) d_rp d_rp(-2) d_rp(-3) d_rp(-4) d_R7_me_lp(-1) d_R7_me_lp(-3)
 show eq_mce_R7_me_lp.output
-' alpha=-0.0125(se=0.0074,p=0.0896, significativo solo al 10%, marginal)
+' CONFIRMADO EN EVIEWS REAL: alpha=-0.0125, p=0.124 -- NO significativo
+' ni al 10% (en Python habia salido marginal, p=0.090; la corrida real
+' es mas debil, lo cual refuerza en vez de contradecir la lectura de
+' que R7 es una serie fragil, ver Seccion 6).
 ' theta0=-0.1279(se=0.1078,p=0.2355, NO significativo)
-' Promedio Hendry = 97.6 meses (~8.1 años) -- reportado con la misma
-' salvedad de fragilidad que R6, aunque menos extrema (aqui alpha SI
-' alcanza el 10%).
+' Promedio Hendry = 97.6 meses (~8.1 años) -- YA NO reportado con la
+' salvedad de "alpha marginal": con la corrida real, R7 queda en el
+' mismo estatus que R6 (alpha no significativo ni al 10%), no es un
+' caso intermedio.
 
 ' --- R8_tamn ---
 equation eq_mce_R8_tamn.ls(cov=hac) d_R8_tamn u_R8_tamn(-1) d_rp d_rp(-1) d_R8_tamn(-1) d_R8_tamn(-2)
@@ -433,7 +437,17 @@ show vec_R9_ftamn.output
 '       de b1 NEGATIVO y alpha POSITIVO (raiz explosiva, no correctora):
 '       ver Seccion 6, es sintoma directo del quiebre en el vector de
 '       cointegracion, no un error de calculo.
-'   R7: b1= 2.744(se0.475,t 5.78)  alpha=-0.020(se0.004,t-5.07)
+'   R7: [CONFIRMADO EN EVIEWS REAL, reemplaza el valor de Python de
+'       abajo] b1=-6.656  alpha=+0.00572  <- signo de b1 NEGATIVO y
+'       alpha POSITIVO, exactamente el mismo patron "roto"/explosivo
+'       que R6 (raiz de ajuste explosiva, no correctora). Este
+'       resultado NO estaba anticipado por la simulacion en Python
+'       (que asumia b1=2.744, alpha=-0.020, ver mas abajo) -- es un
+'       hallazgo nuevo que solo aparecio al correr el VECM real en
+'       EViews, y motiva la investigacion de sub-muestra de R7 en la
+'       Seccion 6 (mismo tratamiento que R6).
+'       [valor de Python, ya superado por el real: b1=2.744(se0.475,
+'       t5.78) alpha=-0.020(se0.004,t-5.07)]
 '   R8: b1= 2.684(se0.508,t 5.28)  alpha=-0.019(se0.004,t-4.90)
 '   R9: b1= 6.699(se1.841,t 3.64)  alpha=-0.008(se0.009,t-0.86, NO
 '       significativo)
@@ -478,7 +492,12 @@ show vec_R9_ftamn.output
 '   R5: beta1=0.793  alpha=-0.051  Promedio=19.76
 '   R6: NO CONVERGE A UN VALOR INTERPRETABLE (beta1 diverge, alpha
 '       colapsa a ~0) -- NO LO REPORTO, ver Seccion 6.
-'   R7: beta1=2.903  alpha=-0.019  Promedio=53.55 (fragil, alpha marginal)
+'   R7: [ACTUALIZAR] con b1=-6.656 real (en vez de 2.744 asumido) el
+'       Bloque 4 restringido de R7 tampoco converge a un valor
+'       confiable -- mismo diagnostico que R6, ver Seccion 6. El valor
+'       de abajo (beta1=2.903) era el calculado en Python sobre el
+'       supuesto (incorrecto) de que R7 se comportaba como R8/R9;
+'       queda obsoleto: [beta1=2.903 alpha=-0.019 Promedio=53.55]
 '   R8: beta1=2.174  alpha=-0.023  Promedio=43.94 (fragil, alpha marginal)
 '   R9: beta1=2.722  alpha=-0.036  Promedio=27.77
 
@@ -599,6 +618,52 @@ show vec_R9_ftamn.output
 ' la tasa de politica (sustitucion hacia plazos mas cortos), rompiendo
 ' la relacion de cointegracion estable que si se sostiene en las
 ' categorias de mayor liquidez/volumen (R1-R4).
+'
+' *** CASO ESPECIAL R7 (Medianas Empresas >360 dias): investigacion
+' completa, mismo tratamiento que R6, hecha en Python tras confirmar en
+' EViews real que el VECM de R7 tambien esta "roto" (b1=-6.656,
+' alpha=+0.00572 -- ver arriba en el Bloque 1). A diferencia de R6, la
+' prueba de Quandt-Andrews SI se corrio en EViews real sobre la
+' ecuacion de corto plazo de R7 y encontro su maximo LR F-statistic en
+' 2024m03 -- pero, por consistencia metodologica con el tratamiento de
+' R6 (que uso el quiebre de la regresion de NIVELES, no el de la
+' ecuacion de corto plazo), tambien calcule el sup-F sobre la
+' regresion de niveles de R7 en Python: el maximo da en 2020m06 (F=89.4,
+' recorte 15%) -- una fecha bastante distinta a la de EViews. Como
+' sanity check de mi propia implementacion del sup-F, la corri tambien
+' sobre R6 y me dio el quiebre en 2022m04 (F=86.7), que coincide con el
+' que ya se habia usado arriba -- confirma que el test esta bien
+' implementado, y que la discrepancia de fechas en R7 (2020m06 vs
+' 2024m03) es real, no un error de calculo.
+' Con esos dos candidatos de fecha, reestime FMOLS por separado en
+' cada mitad, dos veces (una por cada fecha de quiebre candidata):
+'   Split en 2020m06: PRE  (n=118, ago.2010-may.2020) b1=0.4656 (se=0.0922)
+'                     POST (n=73,  jun.2020-jun.2026) b1=0.6372 (se=0.1306)
+'   Split en 2024m03: PRE  (n=163, ago.2010-feb.2024) b1=0.5692 (se=0.1574)
+'                     POST (n=28,  mar.2024-jun.2026) b1=0.3401 (se=0.1679)
+' (FMOLS completo, sin quiebre, para referencia: b1=0.5705, se=0.1411)
+' EN NINGUNO de los dos splits el beta1 de FMOLS cambia de signo -- se
+' mueve en un rango moderado y economicamente sensato (0.34 a 0.64) en
+' las 4 sub-muestras. Esto es MUY distinto de R6, donde el split (con
+' FMOLS, la misma tecnica) SI producia un cambio de signo real
+' (b1=1.036 antes, b1=-0.678 despues).
+' HALLAZGO: el "quiebre roto" de R7 parece ser mayormente un artefacto
+' del METODO de estimacion (VECM/Johansen de sistema completo), no de
+' la relacion de cointegracion en si. Como sanity check adicional, corri
+' tambien la FMOLS de muestra completa de R6 en Python: da b1=0.351
+' (se=0.110) -- un valor moderado y sensato, muy distinto del b1=-3.553
+' que da el VECM de R6 en muestra completa. Es decir, el mismo patron
+' (FMOLS moderado y estable vs. VECM explosivo en muestra completa) se
+' repite en R6 Y R7 -- consistente con que el estimador de sistema
+' completo (Johansen) es mas sensible que el uniecuacional (Engle-
+' Granger/FMOLS) cuando la cointegracion de la serie ya es marginal de
+' por si (recordar: R7 cointegraba por Engle-Granger solo al 10%,
+' p=0.0538, Cuadro 3). La diferencia con R6 es que ahi el propio FMOLS
+' SI mostraba un quiebre con cambio de signo al partir la muestra --
+' para R7 el FMOLS es comparativamente mas estable, y el diagnostico
+' correcto es que el metodo VECM de sistema completo es el que se
+' vuelve numericamente fragil, no necesariamente la relacion de
+' largo plazo entre R7 y RP.
 '
 ' CONCLUSION DE ESTA SECCION: la muestra extendida no deberia tratarse
 ' como una sola relacion estable de traspaso para las 9 series por
