@@ -627,12 +627,20 @@ show vec_R9_ftamn.output
 !nobs = 191
 !nroll = !nobs - !window + 1
 
+' CORRECCION (encontrada corriendo esto en EViews real): habia
+' declarado v_beta1_{%s} como "vector" (objeto de algebra de
+' matrices), pero luego trato de graficarlo con "graph.line" como si
+' fuera una serie del workfile -- EViews rechazo con "V_BETA1_... is
+' not a series". El objeto correcto para poder graficarlo en el eje de
+' fechas es una "series" del workfile, indexada por la fecha de FIN de
+' cada ventana (uso @last dentro del smpl de la ventana, en vez de
+' calcular el offset a mano), no un vector 1-indexado aparte.
 for %s R1_pref90 R2_corp_cp R3_ge_cp R4_me_cp R5_corp_lp R6_ge_lp R7_me_lp R8_tamn R9_ftamn
-  vector(!nroll) v_beta1_{%s}
+  series v_beta1_{%s}
   for !i = 0 to !nroll-1
     smpl @first+!i @first+!i+!window-1
     equation eq_roll_{%s}.cointreg(method=fmols,trend=c) {%s} RP_ref
-    v_beta1_{%s}(!i+1) = eq_roll_{%s}.@coefs(2)
+    v_beta1_{%s}(@last) = eq_roll_{%s}.@coefs(2)
   next
 next
 smpl @all
