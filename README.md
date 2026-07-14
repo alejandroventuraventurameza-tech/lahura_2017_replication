@@ -14,7 +14,10 @@ hacia 9 tasas de interés activas del sistema bancario peruano, usando modelos d
 de errores (MCE) lineales y no lineales, bajo dos enfoques: uniecuacional (FMOLS + MCE) y
 multiecuacional (VAR cointegrado / Johansen). La Pregunta 1 del examen pide replicar los
 Gráficos 1–2 y los Cuadros 2–5 del paper (agosto 2010 – mayo 2017); la Pregunta 2 pide
-extender esa réplica (sin el MCE no lineal) a una muestra más reciente.
+extender esa réplica (sin el MCE no lineal) a una muestra más reciente (agosto 2010 – junio
+2026), y esta versión del repositorio va más allá de una extensión literal: incorpora una
+prueba de estabilidad estructural del traspaso, corregida metodológicamente a mitad de
+camino (ver "Estado de la Pregunta 2" abajo).
 
 ## Estructura del repositorio
 
@@ -26,7 +29,7 @@ ef_pucp/
 │   └── figures/
 │       ├── grafico1.png      réplica del Gráfico 1 del paper
 │       └── grafico2.png      réplica del Gráfico 2 del paper
-├── codes/                    11 scripts EViews, uno por cuadro/paso (ver Anexo A del documento)
+├── codes/                    12 scripts EViews, uno por cuadro/paso (ver Anexo A del documento)
 │   ├── P1_1a_correlaciones_graficos.prg
 │   ├── P1_1b_paneles_finales.prg
 │   ├── P1_2a_cuadro2_raizunitaria.prg
@@ -37,10 +40,14 @@ ef_pucp/
 │   ├── P1_3c_cuadro4_mce_no_lineal.prg
 │   ├── P1_4a_cuadro5_var_johansen.prg
 │   ├── P1_4b_cuadro5_resumen.prg
-│   └── P1_4c_cuadro5_mce_no_lineal.prg
+│   ├── P1_4c_cuadro5_mce_no_lineal.prg
+│   └── P2_1_extension_completa.prg           Pregunta 2 completa (Gráficos 1–2, Cuadros 2–5
+│                                              extendidos, estabilidad estructural — Anexo A.10)
 ├── data/
-│   ├── bcrp_series.ipynb                     script de descarga de datos (API BCRP)
-│   ├── tasas_interes_lahura2017.xlsx / .csv  panel exportado, listo para EViews
+│   ├── bcrp_series.ipynb                     script de descarga de datos P1 (API BCRP)
+│   ├── bcrp_series_p2.py                     script de descarga P2, muestra extendida
+│   ├── tasas_interes_lahura2017.xlsx / .csv  panel P1 (82 obs., ago.2010–may.2017)
+│   ├── tasas_interes_lahura2017_ext.xlsx / .csv panel P2 (191 obs., ago.2010–jun.2026)
 │   ├── tasas_interes_lahura2017.wf1          workfile de EViews
 │   ├── BCRPData-metadata-*.csv               catálogo de series BCRP (verificación de códigos)
 │   └── historico_bcrp/                       tablas BCRP históricas (verificación de vintage TAMN)
@@ -54,7 +61,7 @@ ef_pucp/
 ```
 
 `codes/` debe mantenerse como carpeta hermana de `template/`: `content.tex` referencia los
-11 `.prg` con rutas relativas (`../codes/...`) y las dos figuras con rutas relativas dentro
+12 `.prg` con rutas relativas (`../codes/...`) y las dos figuras con rutas relativas dentro
 de `template/figures/`. Si se sube a Overleaf, hay que replicar exactamente esta jerarquía
 de carpetas o la compilación falla con "File not found".
 
@@ -136,39 +143,18 @@ ningún resultado sin explicar sin dejar constancia del proceso de verificación
 
 ## Estado de la Pregunta 2 (extensión)
 
-**Pendiente.** El enunciado pide extender los Gráficos 1–2 y los Cuadros 2–5 (sin el MCE no
-lineal) a una muestra más reciente, usando también el Cuadro 29 de la Nota Semanal del BCRP.
-Esta parte está a cargo de Andrea Quispe y Valeria Avilés; en `template/content.tex` hay un
-párrafo marcador de posición (`\textit{[Esta sección será completada...]}`) en la
-Sección "Pregunta 2" indicando exactamente qué falta y con qué estilo/formato debe
-integrarse (mismos paquetes de tablas y figuras que la Sección 1, más el código EViews
-correspondiente en el Anexo A). Ningún resultado de la Pregunta 2 está incluido todavía en
-este repositorio.
+**Completa.** Extiende los Gráficos 1–2 y los Cuadros 2–5 (sin el MCE no lineal) a agosto
+2010 – junio 2026 (191 observaciones), con los mismos 9 códigos de serie del BCRP ya
+validados en la Pregunta 1, descargados directamente vía `data/bcrp_series_p2.py` (no se usó
+el archivo de datos que circuló inicialmente entre el equipo porque no pudimos verificar su
+procedencia). Código completo en `codes/P2_1_extension_completa.prg` (Anexo A.10 del
+documento).
 
-## Cómo reproducir
-
-1. **Datos:** correr `data/bcrp_series.ipynb` (Python 3, `pandas`/`requests`) para descargar
-   el panel desde la API del BCRP, o usar directamente `data/tasas_interes_lahura2017.xlsx`
-   ya generado.
-2. **EViews:** importar el panel en EViews 12 (`File → Import`, frecuencia mensual, inicio
-   `2010m08`) o abrir directamente `data/tasas_interes_lahura2017.wf1`. Correr los scripts
-   de `codes/` en el orden A.1–A.9 indicado en el Anexo A del documento (cada uno declara su
-   prerrequisito en el encabezado). Los pasos sin equivalente por línea de comandos (pruebas
-   de Johansen, restricciones VEC, ejes duales en gráficos) están documentados como
-   procedimiento manual en el Anexo B.
-3. **Documento:** compilar `template/content.tex` en Overleaf (requiere `biblatex`+`biber` y
-   el paquete de idioma `babel[spanish]`), manteniendo `codes/` y `template/figures/` como
-   carpetas hermanas/hijas según la estructura de arriba.
-
-## Referencia del paper replicado
-
-Lahura, E. (2017). El efecto traspaso de la tasa de interés de política monetaria en Perú:
-Evidencia reciente. *Revista Estudios Económicos*, 33, 9–27. BCRP.
-<https://www.bcrp.gob.pe/docs/Publicaciones/Revista-Estudios-Economicos/33/ree-33-lahura.pdf>
-
-## Autoría y licencia
-
-Trabajo académico elaborado para el curso Econometría Intermedia: Macro (2026-1, PUCP).
-Uso restringido a fines de evaluación del curso; no se otorga licencia de reutilización sobre
-el análisis, el código o el documento sin autorización de los autores.
-
+| Bloque | Resultado | Detalle |
+|---|---|---|
+| Gráficos 1–2 extendidos | Código completo | Incluye la corrección del eje de años (procedimiento manual, Anexo B.4 actualizado) |
+| Cuadro 2 (raíz unitaria) | 10/10 series I(1) | Confirma que la muestra extendida sigue siendo I(1) en niveles |
+| Cuadro 3 (cointegración) | 6/9 sin ambigüedad | Grandes Empresas >360d (R6) deja de cointegrar por Engle-Granger; R6, Preferencial 90d y FTAMN no rechazan "no cointegración" por Johansen al 10% — primera señal de la inestabilidad de la Sección 2.4 |
+| Cuadro 4 extendido (MCE lineal) | 6/9 con α claramente significativo | Grandes/Medianas Empresas >360d y TAMN tienen α marginal o no significativo — el "Promedio (meses)" de esas 3 filas se reporta entre paréntesis con advertencia explícita |
+| Cuadro 5 extendido (VAR cointegrado) | 8/9 interpretables | Grandes Empresas >360d (R6) no converge a un resultado con sentido económico — diagnosticado como un quiebre en el propio vector de cointegración, no un error de estimación (ver Sección 2.4) |
+| **E

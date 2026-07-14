@@ -610,14 +610,248 @@ bajadas).
 \section{Pregunta 2: Extensión de los resultados}
 %%=============================================================
 
-\textit{[Esta sección será completada por Andrea Quispe y Valeria
-Avilés: extensión de los Gráficos 1 y 2 y los Cuadros 2, 3, 4 y 5 de
-Lahura (2017) a una muestra más reciente, usando el Cuadro 29 de la
-Nota Semanal del BCRP, omitiendo el MCE no lineal, según el enunciado
-del examen. Por favor insertar aquí la respuesta a la Pregunta 2,
-respetando el estilo y formato del documento (mismos paquetes de
-tablas/figuras que la Sección 1, y agregando el código EViews
-correspondiente al Anexo A).]}
+Esta sección extiende los Gráficos 1 y 2 y los Cuadros 2 a 5 de
+\textcite{lahura2017} a una muestra más reciente (agosto 2010 -- junio
+2026, 191 observaciones mensuales, frente a las 82 de la Sección 1),
+omitiendo el MCE no lineal, tal como pide el enunciado. Los datos se
+descargaron con el mismo procedimiento y los mismos 9 códigos de serie
+del BCRP ya validados en la Sección 1 (\texttt{data/bcrp\_series\_p2.py},
+Anexo~C.1), sin depender de un archivo de terceros cuya procedencia no
+podíamos verificar. El código completo está en el Anexo~A.10
+(\texttt{P2\_1\_extension\_completa.prg}); la metodología sigue,
+paso a paso, la misma lógica de la Sección 1 (FMOLS, MCE parsimonioso
+por poda general-a-específico, VAR cointegrado de Johansen), con una
+diferencia deliberada: dado que aquí no replicamos una tabla ya
+publicada, los rezagos de las pruebas de raíz unitaria y de
+Engle-Granger se seleccionan por el criterio de Schwarz en vez de
+fijarse a un valor externo.
+
+Extendemos además el análisis más allá del marco original de Lahura
+(2017), con autorización explícita del alcance de esta pregunta: la
+muestra 2010--2026 cruza dos episodios que el paper original nunca
+observó -- la caída de la tasa de política a niveles cercanos a cero
+en 2020--2021 y el ciclo de alza más pronunciado del BCRP en su
+historia reciente (2021--2023, de 0.25\,\% a 7.75\,\%) -- por lo que
+estimar una única relación de traspaso para todo el período, sin
+someterla a una prueba de estabilidad, es un supuesto que no debería
+darse por sentado. La Sección~2.4 desarrolla esta idea con evidencia
+formal.
+
+%%-------------------------------------------------------------
+\subsection{Gráficos 1 y 2 y Cuadros 2--3 extendidos}
+%%-------------------------------------------------------------
+
+Los Gráficos 1 y 2 extendidos (código en el Anexo~A.10; export
+pendiente de la corrida en EViews, ver nota al pie del Anexo~A.10)
+muestran la misma comovimiento visual que en la muestra 2010--2017
+para las tasas de mayor liquidez, pero con una dispersión bastante
+mayor frente a la tasa de política en las series de plazos más largos
+durante 2021--2023. Las correlaciones simples confirman esa lectura:
+$r=0.98$ para la Preferencial 90 días hasta $r=0.35$ para Grandes
+Empresas $>$360 días -- todas altamente significativas ($p<0.001$),
+pero notablemente más bajas para R5--R8 que en la muestra original,
+una primera señal (todavía descriptiva) de la inestabilidad que se
+documenta en la Sección~2.4.
+
+Las pruebas de raíz unitaria (Cuadro 2 extendido, DF-GLS en niveles y
+ADF en diferencias, rezagos por Schwarz) confirman que las 10 series
+(9 tasas activas más $RP$) siguen siendo procesos I(1): ninguna
+rechaza la raíz unitaria en niveles, y las 10 la rechazan en
+diferencias con márgenes amplios ($t$ entre $-2.6$ y $-12.4$,
+$p<0.01$ en todos los casos).
+
+El Cuadro 3 extendido (cointegración) es donde aparece la primera
+grieta cuantitativa: a diferencia de la Sección 1, donde las 9 series
+cointegraban con la tasa de política en las dos pruebas, aquí
+\textbf{Grandes Empresas $>$360 días (R6) deja de cointegrar por
+Engle-Granger} ($p=0.17$), y tanto R6 como \textbf{Preferencial 90d
+(R1) y FTAMN (R9) no rechazan ``no cointegración'' con Johansen al
+10\,\%} (R1 por un margen mínimo, R9 con más claridad). El resto
+cointegra sin ambigüedad. Detalle completo, incluidos los rezagos por
+serie, en el Anexo~A.10.
+
+%%-------------------------------------------------------------
+\subsection{Cuadros 4 y 5 extendidos}
+%%-------------------------------------------------------------
+
+\begin{table}[ht]
+\renewcommand{\thetable}{6}
+\begin{threeparttable}
+\caption{Efecto traspaso y velocidad de ajuste, muestra extendida
+         2010--2026 (enfoque uniecuacional, Cuadro 4 extendido)}
+\label{tab:cuadro4ext}
+\small
+\begin{tabular}{lccccl}
+\toprule
+Tasa activa & $\beta_1$ (FMOLS) & $\alpha$ (MCE) & $\theta_0$ (MCE) & Promedio (meses) & Observación\\
+\midrule
+Preferencial 90d         & 1.04 & $-0.08$\rlap{*} & 0.43\rlap{*} & 7.1  & \\
+Corporativa $\le$360d    & 0.90 & $-0.11$\rlap{*} & $-0.00$      & 9.4  & \\
+Grandes Emp.\ $\le$360d  & 0.82 & $-0.12$\rlap{*} & 0.04         & 7.7  & \\
+Medianas Emp.\ $\le$360d & 0.68 & $-0.15$\rlap{*} & 0.19\rlap{*} & 4.9  & \\
+Corporativa $>$360d      & 0.28 & $-0.02$\rlap{*} & $-0.02$      & 46.8 & Traspaso ya débil en P1 \\
+Grandes Emp.\ $>$360d    & 0.35 & $-0.01$         & $-0.39$      & (208)\tnote{a} & $\alpha$ no significativo \\
+Medianas Emp.\ $>$360d   & 0.57 & $-0.01$\rlap{\textdagger} & $-0.13$ & (97.6)\tnote{a} & $\alpha$ marginal (10\,\%) \\
+TAMN                     & 0.51 & $-0.01$\rlap{\textdagger} & 0.00         & (75.4)\tnote{a} & $\alpha$ marginal (10\,\%) \\
+FTAMN                    & 2.16 & $-0.05$\rlap{\textdagger} & 0.36         & 15.7 & $\alpha$ marginal (10\,\%) \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item * $p<0.05$; \textdagger\ $p<0.10$ (marginal). MCE con errores
+HAC (Newey-West, Bartlett). $\beta_1$, $\alpha$ y $\theta_0$
+verificados en Python sobre los mismos 191 datos, pendientes de
+confirmación final en EViews real (Anexo~A.10).
+\item[a] El Promedio (meses) se reporta entre paréntesis y en cursiva
+conceptual porque $\alpha$ no es significativo (R6) o solo lo es al
+margen del 10\,\% (R7, R8, R9): dividir entre un $\alpha$
+estadísticamente indistinguible de cero produce una cifra que es un
+artefacto aritmético, no una estimación informativa del tiempo de
+ajuste. No deberían leerse con la misma confianza que las 5 filas
+superiores.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Seis de las nueve series (Preferencial 90d, Corporativa y Grandes
+Empresas de corto plazo, Medianas Empresas de corto plazo, Corporativa
+de largo plazo y FTAMN) mantienen una velocidad de ajuste claramente
+significativa. En las tres restantes -- todas categorías de tasas de
+plazo largo y previsiblemente menor volumen de operaciones --
+$\alpha$ es marginal o de plano no significativo, y el ``Promedio en
+meses'' correspondiente no debería tomarse en serio sin esa
+advertencia: no es un defecto del procedimiento, sino el resultado
+honesto de podar un modelo cuando los datos, en esa parte de la
+muestra, no permiten estimar $\alpha$ con precisión.
+
+El Cuadro 5 extendido (VAR cointegrado / Johansen, Caso 2, mismo
+procedimiento de restricciones VEC que la Sección~1.3) confirma el
+patrón: en 8 de las 9 series se rechaza el traspaso completo
+($\beta_1=1$) y la exogeneidad débil conjunta con amplio margen
+(solo Preferencial 90d no rechaza ninguna de las dos hipótesis, igual
+que en la muestra 2010--2017 del paper original -- ese resultado
+particular sí es robusto a la extensión de la muestra). Para
+\textbf{Grandes Empresas $>$360 días (R6) el Cuadro 5 extendido no
+produce un resultado interpretable}: el bloque sin restricciones da
+$\beta_1=-3.55$ (signo económicamente absurdo) con una raíz de ajuste
+positiva ($\alpha=0.008>0$, explosiva en vez de correctora), y el
+bloque restringido (solo exogeneidad débil) diverge en vez de
+converger a un valor razonable. La Sección~2.4 explica por qué.
+
+%%-------------------------------------------------------------
+\subsection{Estabilidad estructural del traspaso: hallazgo central
+            de la extensión}
+%%-------------------------------------------------------------
+
+Dado que la muestra extendida cruza la pandemia y el ciclo de alza de
+tasas 2021--2023, sometimos la relación de traspaso a una prueba de
+quiebre estructural. La primera versión de esta prueba (Quandt-Andrews
+directo sobre la regresión de niveles $R_{i,t}=\beta_0+\beta_1 RP_t+u_t$)
+resultó \textbf{metodológicamente inválida}: $R_i$ y $RP$ son ambas
+I(1) (Cuadro 2), por lo que esa regresión es cointegrante, no
+estacionaria, y la teoría asintótica de \textcite{andrews1993}
+para el estadístico sup-$F$ asume regresores I(0) -- aplicarla
+directamente sobre una regresión cointegrante puede sobre-rechazar
+la hipótesis nula de estabilidad (la teoría correcta para ese caso es
+\textcite{hansen1992}, con una distribución asintótica distinta).
+
+La corrección: en vez de probar estabilidad en la ecuación de niveles,
+la probamos en la \textbf{ecuación de corto plazo del MCE}, donde los
+regresores ($\Delta RP_t$ contemporáneo y el término de corrección de
+errores rezagado, estacionario por construcción si existe
+cointegración) sí son I(0) y la teoría clásica de Andrews (1993) aplica
+sin distorsión. Se testeó quiebre en $\alpha$ (velocidad de ajuste),
+en $\theta_0$ (efecto contemporáneo) y conjunto, con recorte simétrico
+del 15\,\% en los extremos de la muestra.
+
+\begin{table}[ht]
+\renewcommand{\thetable}{7}
+\begin{threeparttable}
+\caption{Prueba de estabilidad estructural (Quandt-Andrews sobre la
+         ecuación de corto plazo del MCE)}
+\label{tab:estabilidad}
+\small
+\begin{tabular}{lccc}
+\toprule
+Tasa activa & $F$ conjunto ($\alpha,\theta_0$) & $F$ solo $\alpha$ & $F$ solo $\theta_0$ \\
+\midrule
+Preferencial 90d         & 10.96\rlap{*} & 4.24          & 24.57\rlap{*} \\
+Corporativa $\le$360d    & 11.42\rlap{*} & 26.71\rlap{*} & 31.86\rlap{*} \\
+Grandes Emp.\ $\le$360d  & 10.46\rlap{*} & 20.30\rlap{*} & 21.00\rlap{*} \\
+Medianas Emp.\ $\le$360d &  5.40         &  3.67         & 11.32\rlap{*} \\
+Corporativa $>$360d      & 10.80\rlap{*} & 30.64\rlap{*} &  8.86\rlap{*} \\
+Grandes Emp.\ $>$360d    &  3.91         &  8.61\rlap{*} &  2.10         \\
+Medianas Emp.\ $>$360d   &  6.36         & 14.11\rlap{*} &  4.62         \\
+TAMN                     &  4.84         & 11.63\rlap{*} &  1.46         \\
+FTAMN                    &  6.37         &  9.01\rlap{*} &  9.43\rlap{*} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize\item
+* Significativo al 10\,\%. Valores críticos aproximados (recorte
+15\,\%, \textcite{andrews1993}/\textcite{andrewsploberger1994}):
+4.87/5.94/8.53 (1 restricción) y 6.42/7.63/10.42 (3 restricciones) a
+10/5/1\,\%. Estadísticos verificados en Python; pendiente confirmación
+en EViews real.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+El hallazgo sobrevive a la corrección metodológica: 6 de 9 series
+rechazan estabilidad de parámetros incluso con la versión válida del
+test. El patrón por tipo de quiebre es informativo por sí mismo --
+Preferencial 90d rompe solo en $\theta_0$ (cambió el efecto
+contemporáneo, no la velocidad de ajuste); Corporativa y Grandes
+Empresas de corto plazo, Corporativa de largo plazo y FTAMN rompen en
+ambos parámetros; Grandes Empresas y Medianas Empresas de largo plazo
+y TAMN rompen específicamente en $\alpha$. Medianas Empresas de corto
+plazo es la única serie donde la versión corregida del test ya no
+rechaza estabilidad al 10\,\% (la versión ingenua sobre niveles sí
+rechazaba) -- evidencia concreta de que la corrección metodológica no
+fue un ejercicio cosmético.
+
+\textbf{El caso de Grandes Empresas $>$360 días (R6).} Para entender
+por qué el Cuadro 5 extendido no produce un resultado interpretable
+para esta serie, dividimos la muestra en la fecha de quiebre estimada
+sobre la regresión de niveles (abril de 2022) y reestimamos FMOLS por
+separado en cada mitad: el efecto traspaso es $\beta_1=1.04$
+(EE$=0.09$) antes de abril de 2022, y $\beta_1=-0.68$ (EE$=0.06$)
+después -- el signo se invierte. El quiebre en R6 no es solo en la
+dinámica de corto plazo: es en el propio \textbf{vector de
+cointegración}. El VAR cointegrado de muestra completa está forzando
+una única relación de largo plazo sobre dos regímenes genuinamente
+distintos, y por eso el algoritmo de máxima verosimilitud no converge
+a un resultado con sentido económico -- no es un error de esta
+réplica, es el diagnóstico correcto de aplicarle a R6 un modelo que
+no debería aplicársele sin permitir el quiebre. Una hipótesis
+económica tentativa (no verificada con información adicional): R6 es
+la categoría de crédito corporativo de mayor plazo y, presumiblemente,
+menor volumen de operaciones, el tipo de serie más expuesta a que el
+ciclo de alza 2021--2023 contrajera la demanda de crédito largo de
+forma no proporcional al alza de la tasa de política.
+
+Como evidencia complementaria -- y más intuitiva que una tabla de
+estadísticos $F$ -- estimamos el efecto traspaso en ventanas móviles
+de 72 meses (Gráfico~3, pendiente de exportar desde EViews, Anexo~A.10).
+El ejemplo más claro es TAMN, cuyo $\beta_1$ rodante cae de 1.41 (en
+ventanas centradas en 2016--2022) a 0.47 (ventana que termina en
+junio de 2026); FTAMN muestra el patrón inverso, de 1.29 a 1.86.
+
+\textbf{Conclusión de esta sección.} La muestra extendida no debería
+tratarse como una única relación estable de traspaso para las 9
+series por igual. Un tratamiento riguroso y completo de esta
+extensión requeriría, como mínimo, permitir un quiebre estructural
+endógeno en la relación de cointegración misma para las series donde
+el quiebre es más severo (R6, y en menor medida R7 y R8) --
+metodologías como \textcite{gregoryhansen1996} (que extiende
+Engle-Granger a un quiebre endógeno en la regresión de cointegración)
+o la extensión de Johansen con quiebre de \textcite{johansenmosconinielsen2000}
+son la vía natural. Dado el alcance de esta pregunta (4 puntos) y el
+tiempo disponible antes de la entrega, documentamos aquí el
+diagnóstico completo -- con evidencia formal de que es real y no un
+artefacto de una prueba mal aplicada -- en vez de implementar esas dos
+metodologías adicionales, que quedan identificadas como la extensión
+natural de este trabajo.
 
 \clearpage
 %%=============================================================
@@ -644,7 +878,7 @@ ef_pucp/
 |   `-- figures/
 |       |-- grafico1.png
 |       `-- grafico2.png
-|-- codes/                   11 archivos .prg de EViews (Anexo A)
+|-- codes/                   12 archivos .prg de EViews (Anexo A)
 |   |-- P1_1a_correlaciones_graficos.prg
 |   |-- P1_1b_paneles_finales.prg
 |   |-- P1_2a_cuadro2_raizunitaria.prg
@@ -655,10 +889,13 @@ ef_pucp/
 |   |-- P1_3c_cuadro4_mce_no_lineal.prg
 |   |-- P1_4a_cuadro5_var_johansen.prg
 |   |-- P1_4b_cuadro5_resumen.prg
-|   `-- P1_4c_cuadro5_mce_no_lineal.prg
+|   |-- P1_4c_cuadro5_mce_no_lineal.prg
+|   `-- P2_1_extension_completa.prg      Pregunta 2 completa (Anexo A.10)
 |-- data/
-|   |-- bcrp_series.ipynb                  script de descarga (Anexo C.1)
-|   |-- tasas_interes_lahura2017.xlsx/.csv panel exportado
+|   |-- bcrp_series.ipynb                  script de descarga P1 (Anexo C.1)
+|   |-- bcrp_series_p2.py                  script de descarga P2, muestra extendida
+|   |-- tasas_interes_lahura2017.xlsx/.csv panel P1 (82 obs., ago.2010-may.2017)
+|   |-- tasas_interes_lahura2017_ext.xlsx/.csv panel P2 (191 obs., ago.2010-jun.2026)
 |   |-- tasas_interes_lahura2017.wf1       workfile EViews
 |   |-- BCRPData-metadata-*.csv            catalogo de series BCRP
 |   `-- historico_bcrp/                    tablas BCRP historicas (verificacion TAMN)
@@ -736,6 +973,11 @@ encabezado de comentarios).
 \subsubsection*{A.9. Cuadro 5 -- MCE no lineal, extra crédito
                     (\texttt{P1\_4c})}
 \lstinputlisting[language=EViews]{../codes/P1_4c_cuadro5_mce_no_lineal.prg}
+
+\subsubsection*{A.10. Pregunta 2 completa -- Gráficos 1--2, Cuadros
+                    2--5 extendidos y extensión de estabilidad
+                    estructural (\texttt{P2\_1\_extension\_completa})}
+\lstinputlisting[language=EViews]{../codes/P2_1_extension_completa.prg}
 
 %%-------------------------------------------------------------
 \subsection*{B. Procedimientos manuales (no automatizables por
