@@ -245,18 +245,26 @@ next
 ' de rezago distintos, igual que en el Cuadro 3 original del paper).
 '   R1: N=1   R2: N=1   R3: N=1   R4: N=1   R5: N=1
 '   R6: N=4   R7: N=2   R8: N=1   R9: N=4
-' PROCEDIMIENTO MANUAL (una vez por serie, igual que en P1_2c):
-'   gg_<serie>.coint(2,1,N) -> Deterministic trend: opcion 2 ->
-'   Lag intervals: "1 N" -> Critical Values: MHM (1999) -> Aceptar.
-gg_R1_pref90.coint(2,1,1)
-gg_R2_corp_cp.coint(2,1,1)
-gg_R3_ge_cp.coint(2,1,1)
-gg_R4_me_cp.coint(2,1,1)
-gg_R5_corp_lp.coint(2,1,1)
-gg_R6_ge_lp.coint(2,1,4)
-gg_R7_me_lp.coint(2,1,2)
-gg_R8_tamn.coint(2,1,1)
-gg_R9_ftamn.coint(2,1,4)
+' CORRECCION IMPORTANTE (encontrada corriendo esto en EViews real):
+' mi primer intento uso ".coint(2,1,N)" -- sintaxis invalida, EViews la
+' rechazo con "COINT command requires trend specification option". La
+' sintaxis real (Command Reference, Group::coint) especifica el Caso 2
+' con la palabra clave "determ=cltn" (no un numero), y el intervalo de
+' rezagos va FUERA del parentesis, no como argumentos separados por
+' coma: group_name.coint(determ=cltn) lag_lo lag_hi. Con esta sintaxis
+' corregida, el comando corre headless (no abre el dialogo interactivo,
+' a diferencia de lo que documente antes en el Anexo B.1 -- ver
+' correccion tambien ahi). Critical values MHM (1999) es el default,
+' no hace falta especificarlo.
+gg_R1_pref90.coint(determ=cltn) 1 1
+gg_R2_corp_cp.coint(determ=cltn) 1 1
+gg_R3_ge_cp.coint(determ=cltn) 1 1
+gg_R4_me_cp.coint(determ=cltn) 1 1
+gg_R5_corp_lp.coint(determ=cltn) 1 1
+gg_R6_ge_lp.coint(determ=cltn) 1 4
+gg_R7_me_lp.coint(determ=cltn) 1 2
+gg_R8_tamn.coint(determ=cltn) 1 1
+gg_R9_ftamn.coint(determ=cltn) 1 4
 
 ' Verificado en Python (mismo procedimiento RRR de Johansen, propio,
 ' cruzado contra statsmodels VECM para los alpha/beta -- ver Seccion 6
@@ -377,19 +385,23 @@ show eq_mce_R9_ftamn.output
 ' version original) y corro las pruebas de hipotesis sobre ellos.
 ' ============================================================
 
-var vec_R1_pref90.ec(1) 1 1 R1_pref90 RP_ref
-var vec_R2_corp_cp.ec(1) 1 1 R2_corp_cp RP_ref
-var vec_R3_ge_cp.ec(1) 1 1 R3_ge_cp RP_ref
-var vec_R4_me_cp.ec(1) 1 1 R4_me_cp RP_ref
-var vec_R5_corp_lp.ec(1) 1 1 R5_corp_lp RP_ref
-var vec_R6_ge_lp.ec(1) 1 4 R6_ge_lp RP_ref
-var vec_R7_me_lp.ec(1) 1 2 R7_me_lp RP_ref
-var vec_R8_tamn.ec(1) 1 1 R8_tamn RP_ref
-var vec_R9_ftamn.ec(1) 1 4 R9_ftamn RP_ref
+var vec_R1_pref90.ec(determ=cltn) 1 1 R1_pref90 RP_ref
+var vec_R2_corp_cp.ec(determ=cltn) 1 1 R2_corp_cp RP_ref
+var vec_R3_ge_cp.ec(determ=cltn) 1 1 R3_ge_cp RP_ref
+var vec_R4_me_cp.ec(determ=cltn) 1 1 R4_me_cp RP_ref
+var vec_R5_corp_lp.ec(determ=cltn) 1 1 R5_corp_lp RP_ref
+var vec_R6_ge_lp.ec(determ=cltn) 1 4 R6_ge_lp RP_ref
+var vec_R7_me_lp.ec(determ=cltn) 1 2 R7_me_lp RP_ref
+var vec_R8_tamn.ec(determ=cltn) 1 1 R8_tamn RP_ref
+var vec_R9_ftamn.ec(determ=cltn) 1 4 R9_ftamn RP_ref
 
-' Para las 9: "Estimate" -> pestaña "Cointegration" -> radio button
-' "2) Intercept (no trend) in CE - no intercept in VAR" -> Aceptar
-' (mismo paso manual de P1_4a, ineludible sin el Command Reference).
+' CORRECCION (mismo hallazgo que en el Cuadro 3): el comando .ec()
+' acepta el Caso 2 directo por "determ=cltn" (Command Reference,
+' Var::ec) -- no hace falta el paso manual "Estimate -> Cointegration
+' -> opcion 2" que documente antes en el Anexo B.2 (ese Anexo queda
+' desactualizado, lo corrijo en content.tex). Si por algun motivo tu
+' version de EViews igual abre el dialogo, ahi si sigue el paso manual
+' como respaldo.
 show vec_R1_pref90.output
 show vec_R2_corp_cp.output
 show vec_R3_ge_cp.output
