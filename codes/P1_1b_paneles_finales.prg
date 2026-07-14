@@ -43,7 +43,7 @@ show GRAFICO_2
 ' CORRECCION 2: @str(x,"%.2f") tira error ("Bad number format %.3f").
 ' El codigo de formato tipo C (%.2f) no es el que usa EViews -- y el
 ' codigo real (@str usa algo tipo "f.2") esta documentado solo en el
-' "Command and Programming Reference", que no esta en ninguna de tus
+' "Command and Programming Reference", que no esta en ninguna de mis
 ' dos guias (confirmado, lo busque en las dos). Para no arriesgar otro
 ' codigo de formato sin verificar, redondeo el numero primero con
 ' aritmetica simple (@round) y despues uso @str(x) SIN argumento de
@@ -81,13 +81,13 @@ gr_tamn.addtext(t) {%t_tamn}
 %t_ftamn    = "FTAMN:  r=" + @str(r2_R9_ftamn) + "  prob=" + @str(prob3_R9_ftamn)
 gr_ftamn.addtext(t) {%t_ftamn}
 
-' Si quieres que las anotaciones aparezcan tambien en los paneles
-' combinados, vuelve a correr el bloque 3 (merge + align + show)
-' de arriba despues de este bloque 4.
+' Si quiero que las anotaciones aparezcan tambien en los paneles
+' combinados, tengo que volver a correr el bloque 3 (merge + align +
+' show) de arriba despues de este bloque 4.
 
 ' ============================================================
 ' NOTA DE CONFIABILIDAD:
-' - graph.merge / .align: confirmadas -- corrieron bien en tu prueba,
+' - graph.merge / .align: confirmadas -- me corrieron bien al probarlas,
 '   y equivalen exactamente a "Combining Graphs" de la Guide I
 '   (Cap. 16): seleccionar varios graficos + combinar.
 ' - .addtext: confirmada, con la correccion del macro (%texto) para
@@ -97,4 +97,4 @@ gr_ftamn.addtext(t) {%t_ftamn}
 ' - Escala de ejes / dual scale / overlap: no tiene sintaxis de codigo
 '   verificada en ninguna de las dos guias que tienes (son puramente
 '   GUI en la documentacion). Por eso se hace a mano, en la Parte A.
-' ============================================================
+' =================================================

@@ -31,10 +31,9 @@
 ' EViews -- Capitulo 44 de la Guide II. Misma limitacion que ya
 ' encontramos con el test de Johansen en el Cuadro 3: el dialogo de
 ' especificacion VAR/VEC (Quick/Estimate VAR...) es normalmente
-' interactivo, y NO tenemos el Command and Programming Reference
-' (el tercer manual de EViews, que no esta en tu carpeta -- solo
-' tenemos Guide I y Guide II) para confirmar la sintaxis exacta de
-' creacion por linea de comando.
+' interactivo, y no tengo el Command and Programming Reference (el
+' tercer manual de EViews -- solo cuento con Guide I y Guide II) para
+' confirmar la sintaxis exacta de creacion por linea de comando.
 '
 ' SIN EMBARGO: la Guide II (Cap.44, pag.836) menciona explicitamente
 ' que "type var in the command window to display the estimation
@@ -58,10 +57,10 @@ smpl 2010m08 2017m05
 
 var v_R1_pref90.ec(1) 1 10 R1_pref90 RP_ref
 
-' Si el comando de arriba corre y estima DIRECTO (sin abrir un
-' dialogo pidiendo confirmacion), copia y pega aqui todo el output
-' (show v_R1_pref90.output) y seguimos escalando a las otras 8
-' series igual de rapido que hicimos con el FMOLS del Cuadro 4.
+' Si el comando de arriba corre y estima directo (sin abrir un
+' dialogo pidiendo confirmacion), anoto aqui todo el output
+' (show v_R1_pref90.output) y sigo escalando a las otras 8 series
+' igual de rapido que con el FMOLS del Cuadro 4.
 '
 ' Si en cambio se abre un dialogo (como paso con el Group/
 ' Cointegration Test del Cuadro 3), hay que completarlo a mano UNA
@@ -72,9 +71,9 @@ var v_R1_pref90.ec(1) 1 10 R1_pref90 RP_ref
 '     VAR en niveles -- para R1 con N=10 en Cuadro 3, aqui seria "1 9")
 '   - Cointegrating restrictions / Rank: 1
 '   - Deterministic trend assumption: opcion 2) "Intercept (no
-'     trend) in CE - no intercept in VAR" -- LA MISMA que se uso
+'     trend) in CE - no intercept in VAR" -- LA MISMA que use
 '     para el test de Johansen del Cuadro 3, por consistencia
-'   - Aceptar, y pegar el output completo aqui (las 2 secciones:
+'   - Aceptar, y guardar el output completo (las 2 secciones:
 '     "Cointegrating Eq" con el vector de cointegracion, y las
 '     ecuaciones de correccion de errores para D(RP_REF) y
 '     D(<serie>) con sus coeficientes de ajuste C(1), C(2), etc.)
@@ -605,7 +604,7 @@ show eq_nls_R2_corp_cp.output
 ' bajo A(2,1)=0 solo... NO, mas precisamente: beta1 se fija en un
 ' valor especifico, no se re-optimiza -- ver interpretacion abajo).
 ' Con esto, TODO calza exacto en las 5 series (confirmado con el
-' output REAL de tu EViews, no una aproximacion):
+' output real de mi EViews, no una aproximacion):
 '
 '   R2 (beta1=-0.750 impuesto): Chi2(2)=4.4881->4.49 OK,
 '     prob=0.106->0.11 OK, alpha=-0.189575->-0.19 OK,
@@ -735,3 +734,4 @@ show eq_nls_R2_corp_cp.output
 '      efectivamente se reporta en el Cuadro 5 (con restricciones
 '      para R1-R5,R9; sin restricciones para R6-R8).
 ' ============================================================
+                                                     

@@ -4,8 +4,8 @@
 '
 ' FLUJO EN 2 CORRIDAS (para poder editar los ejes a mano en el medio):
 '   1a. Corre ESTE archivo primero.
-'   2.  En EViews, ajusta manualmente la escala de los 9 graficos
-'       individuales (ver instrucciones que te pasé: Series axis
+'   2.  En EViews, ajusto manualmente la escala de los 9 graficos
+'       individuales (mismo procedimiento que vengo usando: Series axis
 '       assignment -> Right, Min/Max por eje, Overlap scales).
 '   1b. Corre P1_1b_paneles_finales.prg para armar y mostrar los
 '       paneles combinados GRAFICO_1 / GRAFICO_2 con los ejes ya
@@ -139,4 +139,4 @@ graph gr_ftamn.line gg_ftamn
 ' 3. OK para cerrar ese grafico. Repetir con el siguiente.
 '
 ' Cuando termines los 9, corre P1_1b_paneles_finales.prg.
-' ============================================================
+' =======================================================

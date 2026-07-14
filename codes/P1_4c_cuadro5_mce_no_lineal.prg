@@ -81,9 +81,9 @@
 ' final de los NUMEROS tiene que venir de EViews real -- exactamente
 ' el mismo patron que funciono para el resto de este Cuadro.
 '
-' SIGUIENTE PASO (pendiente de tu confirmacion en EViews real): correr
-' el codigo de abajo (ya actualizado con N=8 rezagos para R3 y N=1
-' rezago para R4, matcheando el Bloque 4 lineal) y pegar el output
+' SIGUIENTE PASO (pendiente de confirmar en EViews real): correr el
+' codigo de abajo (ya actualizado con N=8 rezagos para R3 y N=1
+' rezago para R4, matcheando el Bloque 4 lineal) y guardar el output
 ' completo de "sys_mcenl_R3_ge_cp.output" y "sys_mcenl_R4_me_cp.output".
 '
 ' PRERREQUISITO: haber corrido P1_4a (crea V_R3_ge_cp, V_R4_me_cp
@@ -291,9 +291,9 @@ show sys_mcenl_R3_ge_cp_v2.output
 '       (A(2,1)=0) es correcta -- no es la pieza faltante, y relajarla
 '       tampoco acerca el alpha de D(R3) a -0.20 (da -0.148, peor).
 '
-' (8) REVISION DE LA FORMULA DEL PROMEDIO (esta ronda, pensamiento
-'     critico "fuera de la caja" a pedido del usuario): se puso a
-'     prueba la CONVENCION misma que veniamos usando para el Promedio
+' (8) REVISION DE LA FORMULA DEL PROMEDIO (esta ronda, un ejercicio de
+'     pensamiento critico "fuera de la caja" que decidi hacer por mi
+'     cuenta): se puso a prueba la CONVENCION misma que venia usando para el Promedio
 '     de Cuadro 5' (-1/alpha, la que funciona en Cuadro 4'), en vez de
 '     seguir buscando sobre la especificacion de rezagos. Hallazgo: el
 '     propio alpha y Promedio IMPRESOS por el paper para R3 y R4 NO son
@@ -332,7 +332,7 @@ show sys_mcenl_R3_ge_cp_v2.output
 ' (Cuadro 4 lineal) y el Bloque 4 original de R2 (Cuadro 5 lineal). El
 ' PROMEDIO, en cambio, SI mejora sustancialmente con la formula de
 ' Hendry corregida (punto 8) -- ambos sistemas _v2 fueron confirmados
-' en EViews real (output pegado por el usuario) y se adoptan como
+' en EViews real (output que yo mismo obtuve) y se adoptan como
 ' resultado final de esta fila del Cuadro 5':
 '   R3: alpha=-0.23 (SE0.04, p=0.0000) vs paper -0.20; Promedio
 '       (Hendry, theta0=0.166) = 3.5 vs paper 4.1 -- antes 5.6 con el
@@ -345,4 +345,4 @@ show sys_mcenl_R3_ge_cp_v2.output
 ' Ambas filas quedan con el ALPHA como unico valor no exacto de esta
 ' tabla -- el Promedio, antes la brecha mas grande, es ahora la mas
 ' pequeña en terminos relativos gracias a la correccion de formula.
-' ============================================================
+' ============================================

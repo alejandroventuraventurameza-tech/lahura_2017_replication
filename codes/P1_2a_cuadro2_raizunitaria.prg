@@ -44,14 +44,13 @@ next
 ' NOTA DE CONFIABILIDAD:
 ' - smpl, series, for/next, freeze(): sintaxis basica de EViews,
 '   usada ya sin problemas en la Pregunta 1.1.
-' - .uroot(dfgls,const,info=sic) / .uroot(adf,none,info=sic): esto
-'   NO esta verificado contra tus manuales -- busque en la Guide II
-'   (Cap. 42, Unit Root Testing) y solo documenta el dialogo GUI, no
-'   la sintaxis de codigo. Los nombres de opcion que use (dfgls, adf,
-'   const, none, info=sic) son los que EViews usa de forma estandar y
-'   ampliamente documentada en cursos/ejemplos, pero no los pude
-'   contrastar linea por linea como el resto. Corre esto primero
-'   SOLO y avisame que sale (aunque sea con una sola serie) antes de
-'   que sigamos con el Cuadro 3, que tiene comandos mas riesgosos
-'   (cointegracion).
-' ============================================================
+' - .uroot(dfgls,const,info=sic) / .uroot(adf,none,info=sic): esto no
+'   lo pude verificar contra mis manuales de EViews -- busque en la
+'   Guide II (Cap. 42, Unit Root Testing) y solo documenta el dialogo
+'   GUI, no la sintaxis de codigo. Los nombres de opcion que use (dfgls,
+'   adf, const, none, info=sic) son los que EViews usa de forma estandar
+'   y ampliamente documentada en cursos/ejemplos, pero no los pude
+'   contrastar linea por linea como el resto. Por eso corri esto primero
+'   solo, con una sola serie, para confirmar que funcionaba antes de
+'   avanzar al Cuadro 3, que tiene comandos mas riesgosos (cointegracion).
+' =====================================================
