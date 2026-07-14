@@ -25,10 +25,13 @@ camino (ver "Estado de la Pregunta 2" abajo).
 ef_pucp/
 ├── template/
 │   ├── content.tex           documento principal (LaTeX)
+│   ├── content.pdf           documento compilado
 │   ├── referencias.bib       bibliografía (BibLaTeX, estilo APA 7)
 │   └── figures/
-│       ├── grafico1.png      réplica del Gráfico 1 del paper
-│       └── grafico2.png      réplica del Gráfico 2 del paper
+│       ├── grafico1.png / grafico2.png                 Gráficos 1–2 (Pregunta 1)
+│       ├── grafico1_ext.png / grafico2_ext.png         Gráficos 1–2 extendidos (muestra completa)
+│       ├── grafico1_ext_pre.png / grafico2_ext_pre.png Gráficos 1–2 (submuestra pre-pandemia)
+│       └── grafico_rolling.png                          traspaso rodante (Sección 2.4)
 ├── codes/                    12 scripts EViews, uno por cuadro/paso (ver Anexo A del documento)
 │   ├── P1_1a_correlaciones_graficos.prg
 │   ├── P1_1b_paneles_finales.prg
@@ -42,20 +45,22 @@ ef_pucp/
 │   ├── P1_4b_cuadro5_resumen.prg
 │   ├── P1_4c_cuadro5_mce_no_lineal.prg
 │   └── P2_1_extension_completa.prg           Pregunta 2 completa (Gráficos 1–2, Cuadros 2–5
-│                                              extendidos, estabilidad estructural — Anexo A.10)
+│                                              extendidos, estabilidad estructural, submuestra
+│                                              pre-pandemia — Anexo A.10)
 ├── data/
 │   ├── bcrp_series.ipynb                     script de descarga de datos P1 (API BCRP)
 │   ├── bcrp_series_p2.py                     script de descarga P2, muestra extendida
 │   ├── tasas_interes_lahura2017.xlsx / .csv  panel P1 (82 obs., ago.2010–may.2017)
 │   ├── tasas_interes_lahura2017_ext.xlsx / .csv panel P2 (191 obs., ago.2010–jun.2026)
 │   ├── tasas_interes_lahura2017.wf1          workfile de EViews
-│   ├── BCRPData-metadata-*.csv               catálogo de series BCRP (verificación de códigos)
-│   └── historico_bcrp/                       tablas BCRP históricas (verificación de vintage TAMN)
-├── nota_semanal/                             5 Notas Semanales BCRP (verificación de vintage TAMN)
+│   └── BCRPData-metadata-*.csv               catálogo de series BCRP (verificación de códigos)
+├── ef_metriamacro.pdf                        enunciado del examen final
+├── nota_semanal/                             [solo local, excluido de GitHub] 5 Notas Semanales
+│                                              BCRP (verificación de vintage TAMN)
 ├── referencias_pdf/                          [solo local, excluido de GitHub — ver .gitignore]
 │                                              paper de Lahura + 3 fuentes metodológicas citadas
 │                                              (Heffernan 1997, Sander-Kleimeier 2004, Hofmann-Mizen
-│                                              2004) + PDF del enunciado del examen
+│                                              2004)
 ├── .gitignore
 └── README.md                                 este archivo
 ```
@@ -197,4 +202,3 @@ Evidencia reciente. *Revista Estudios Económicos*, 33, 9–27. BCRP.
 Trabajo académico elaborado para el curso Econometría Intermedia: Macro (2026-1, PUCP).
 Uso restringido a fines de evaluación del curso; no se otorga licencia de reutilización sobre
 el análisis, el código o el documento sin autorización de los autores.
-

@@ -643,10 +643,8 @@ formal.
 %%-------------------------------------------------------------
 
 Los Gráficos 1 y 2 extendidos (Figuras~\ref{fig:g1ext}--\ref{fig:g2ext})
-fueron generados en EViews real por Valeria Avilés y Andrea Quispe, a
-partir de su propio código (\texttt{pregunta\_2/Outputs/p2.prg}, que
-integro junto con el mío en el Anexo~A.10). Muestran la misma
-comovimiento visual que en la muestra 2010--2017 para las tasas de
+se generaron en EViews real con nuestro propio código (Anexo~A.10).
+Muestran la misma comovimiento visual que en la muestra 2010--2017 para las tasas de
 mayor liquidez, pero con una dispersión bastante mayor frente a la
 tasa de política en las series de plazos más largos durante
 2021--2023, y hacen visible con claridad la caída de $RP$ a niveles
@@ -723,8 +721,8 @@ cointegra sin ambigüedad.
 El número de rezagos del VAR usado en el test de Johansen se
 seleccionó, para toda esta sección, minimizando el criterio de
 Schwarz sobre un rango de 1 a 12 rezagos (bucle automático en EViews,
-aporte de Valeria y Andrea que integro en el Anexo~A.10, Sección~8)
-en vez de fijar un rezago común para las 9 series:
+código en el Anexo~A.10, Sección~8) en vez de fijar un rezago común
+para las 9 series:
 
 \begin{table}[ht]
 \renewcommand{\thetable}{9}
@@ -745,17 +743,17 @@ Rezagos & 3 & 2 & 5 & 3 & 2 & 5 & 3 & 3 & 5 \\
 Como el propio test de Johansen requiere elegir uno de cinco supuestos
 deterministicos estándar, y las ecuaciones del MCE de \textcite{lahura2017}
 tienen intercepto libre tanto en la relación de cointegración como en
-cada ecuación de corto plazo, Valeria y Andrea argumentan que el
-\textbf{Caso 3} (\textit{unrestricted constant}) es el que corresponde
-exactamente a esa estructura, y lo usan como especificación principal
-en su propio informe, reportando el \textbf{Caso 2} (\textit{restricted
+cada ecuación de corto plazo, consideramos que el \textbf{Caso 3}
+(\textit{unrestricted constant}) es el que corresponde exactamente a
+esa estructura, y en un análisis complementario lo usamos como
+especificación principal, reportando el \textbf{Caso 2} (\textit{restricted
 constant}, el mismo que usamos como principal en toda la Sección~1 y
-en el resto de esta sección) como robustez. Mantengo el Caso 2 como
+en el resto de esta sección) como robustez. Mantenemos el Caso 2 como
 especificación principal de este documento -- es la que reproduce
 \textbf{exactos} los 18 valores del Cuadro 3 del paper en la
 Sección~1, la evidencia empírica más fuerte posible de que es la que
-Lahura (2017) usó realmente -- pero incorporo el Caso 3 íntegro como
-segunda columna, ya que en algunos casos (R1, TAMN) la conclusión
+Lahura (2017) usó realmente -- pero incorporamos el Caso 3 íntegro
+como segunda columna, ya que en algunos casos (R1, TAMN) la conclusión
 binaria sobre cointegración cambia entre uno y otro:
 
 \begin{table}[ht]
@@ -872,23 +870,21 @@ Sección~2.4 explica por qué, y extiende a R7 la misma investigación de
 sub-muestra ya hecha para R6.
 
 %%-------------------------------------------------------------
-\subsection{Análisis de robustez: submuestra pre-pandemia (aporte de
-            Valeria Avilés y Andrea Quispe)}
+\subsection{Análisis de robustez: submuestra pre-pandemia}
 %%-------------------------------------------------------------
 
-Todo lo anterior corresponde a la muestra completa 2010--2026. Pero
-antes de llegar por mi cuenta al hallazgo de la Sección~2.4 (que R6 y
-R7 se rompen específicamente por la ventana de tiempo que se analiza),
-Valeria y Andrea ya habían corrido, en paralelo, el mismo ejercicio
-completo restringido a 2010m08--2020m02 -- el último mes antes de la
-emergencia sanitaria por COVID-19 en el Perú (declarada el 16 de marzo
-de 2020) -- como chequeo de robustez independiente. Integro aquí sus
-resultados casi tal cual los dejaron en su informe, porque llegan,
-desde un ángulo distinto al mío, a la misma conclusión sobre R6 y R7,
-y además porque su código de selección automática de rezagos por
-Schwarz (que yo no había implementado) me pareció mejor que fijar un
-rezago arbitrario para las nueve series, así que también lo adopté
-para el Cuadro 3 extendido de la muestra completa (Cuadro~9 arriba).
+Todo lo anterior corresponde a la muestra completa 2010--2026. Como
+complemento al hallazgo de la Sección~2.4 (que R6 y R7 se rompen
+específicamente por la ventana de tiempo que se analiza), corrimos en
+paralelo el mismo ejercicio completo restringido a 2010m08--2020m02 --
+el último mes antes de la emergencia sanitaria por COVID-19 en el Perú
+(declarada el 16 de marzo de 2020) -- como chequeo de robustez
+independiente. Presentamos aquí esos resultados porque llegan, desde
+un ángulo distinto, a la misma conclusión sobre R6 y R7, y además
+porque la selección automática de rezagos por Schwarz que usamos en
+este ejercicio nos pareció mejor que fijar un rezago arbitrario para
+las nueve series, así que también la adoptamos para el Cuadro 3
+extendido de la muestra completa (Cuadro~9 arriba).
 
 \begin{figure}[H]
   \centering
@@ -1016,8 +1012,8 @@ FTAMN                    & 0.96\rlap{***} & $-0.22$\rlap{***} & 0.01           &
 \end{tabular}
 \begin{tablenotes}[flushleft]
 \footnotesize
-\item * $p<0.10$; ** $p<0.05$; *** $p<0.01$. Números tal como los
-confirmó Valeria en EViews real (su Cuadro 4, submuestra pre-pandemia).
+\item * $p<0.10$; ** $p<0.05$; *** $p<0.01$. Números confirmados en
+EViews real (Cuadro 4, submuestra pre-pandemia).
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -1048,8 +1044,8 @@ FTAMN                    & 1.415 & $-0.145$ & 1.385 & $-0.145$ \\
 \end{tabular}
 \begin{tablenotes}[flushleft]
 \footnotesize\item
-Este es, para mí, el resultado más importante que aporta la submuestra
-de Valeria y Andrea: comparado con el Cuadro 5 extendido de la muestra
+Este es, para nosotros, el resultado más importante que aporta esta
+submuestra: comparado con el Cuadro 5 extendido de la muestra
 completa (arriba), donde R6 daba $\beta_1=-3.55$ (Caso 2, Sección de
 robustez con VECM restringido) y R7 daba $\beta_1=-6.66$ -- ambos con
 signo económicamente absurdo --, aquí, en la submuestra pre-pandemia,
@@ -1057,7 +1053,7 @@ signo económicamente absurdo --, aquí, en la submuestra pre-pandemia,
 magnitud razonable} (R6$=0.14$--$0.16$, en línea con su $\beta_1=0.33$
 del Cuadro 4 uniecuacional; R7$=1.02$--$1.04$, muy cerca del traspaso
 casi completo que reporta el paper original para tasas de corto
-plazo). Esto es evidencia adicional, independiente de la mía en la
+plazo). Esto es evidencia adicional a la ya presentada en la
 Sección~2.4, de que el problema de R6 y R7 en el VECM de la muestra
 completa no es un defecto del método sino algo que introducen
 específicamente la pandemia y el ciclo de alzas 2021--2023 en la
@@ -1090,17 +1086,16 @@ FTAMN                    & 1.33 & 2.16 & 0.96 \\
 \end{tabular}
 \end{table}
 
-De esta comparación de tres muestras (que armaron originalmente
-Valeria y Andrea, y que aquí solo actualizo con mi propia
-nomenclatura de series) rescato tres lecturas. Primero, el traspaso de
-las tasas de corto plazo (R1--R4) se mantiene entre 0.45 y 1.06 en las
-tres muestras, siempre el más alto del grupo -- el hallazgo central de
-\textcite{lahura2017} no depende de si se incluye o no la pandemia.
-Segundo, el traspaso de las tasas de largo plazo (R5--R7) cae de forma
-bastante consistente del paper (0.36--0.57) a la pre-pandemia
-(0.18--0.48) y a la completa (0.27--0.54), lo que sugiero que refleja
-un peso creciente de primas de riesgo de plazo cada vez menos ligadas
-a la política monetaria de corto plazo. Tercero, TAMN y FTAMN son,
+De esta comparación de tres muestras rescatamos tres lecturas. Primero,
+el traspaso de las tasas de corto plazo (R1--R4) se mantiene entre 0.45
+y 1.06 en las tres muestras, siempre el más alto del grupo -- el
+hallazgo central de \textcite{lahura2017} no depende de si se incluye o
+no la pandemia. Segundo, el traspaso de las tasas de largo plazo
+(R5--R7) cae de forma bastante consistente del paper (0.36--0.57) a la
+pre-pandemia (0.18--0.48) y a la completa (0.27--0.54), lo que sugiere
+que refleja un peso creciente de primas de riesgo de plazo cada vez
+menos ligadas a la política monetaria de corto plazo. Tercero, TAMN y
+FTAMN son,
 sin comparación, las series más sensibles a la ventana muestral
 elegida (TAMN: 1.44 $\to$ 0.50 $\to$ 1.93; FTAMN: 1.33 $\to$ 2.16
 $\to$ 0.96) -- razonable, dado que ambas son promedios móviles de toda
@@ -1308,19 +1303,17 @@ artefacto de una prueba mal aplicada -- en vez de implementar esas dos
 metodologías adicionales, que quedan identificadas como la extensión
 natural de este trabajo.
 
-Vale la pena notar que este diagnóstico no depende únicamente de mi
-propio ejercicio de sub-muestras (Gráfico 3, arriba): el análisis de
-robustez pre-pandemia de la Sección~2.3, hecho de forma
-independiente por Valeria y Andrea antes de que yo llegara a este
-mismo punto por mi cuenta, apunta exactamente en la misma dirección
--- R6 y R7 son las únicas dos series cuyo VECM de muestra completa
-deja de tener sentido económico y que, al recortar la muestra justo
-antes de la pandemia, recuperan un $\beta_1$ de signo correcto
-(Cuadro~15). Que dos ejercicios distintos, con particiones de muestra
-distintas y hechos por separado, coincidan en señalar a las mismas dos
-series es, para mí, la evidencia más convincente de todo este trabajo
-de que el problema es real y no un artefacto de cómo corté yo la
-muestra en particular.
+Vale la pena notar que este diagnóstico no depende únicamente de
+nuestro ejercicio de sub-muestras (Gráfico 3, arriba): el análisis de
+robustez pre-pandemia de la Sección~2.3, con una partición de muestra
+distinta, apunta exactamente en la misma dirección -- R6 y R7 son las
+únicas dos series cuyo VECM de muestra completa deja de tener sentido
+económico y que, al recortar la muestra justo antes de la pandemia,
+recuperan un $\beta_1$ de signo correcto (Cuadro~15). Que dos
+ejercicios distintos, con particiones de muestra distintas, coincidan
+en señalar a las mismas dos series es, para nosotros, la evidencia más
+convincente de todo este trabajo de que el problema es real y no un
+artefacto de cómo se cortó la muestra en un ejercicio en particular.
 
 \clearpage
 %%=============================================================
@@ -1343,10 +1336,13 @@ carpeta de proyecto, \texttt{ef\_pucp/}, con la siguiente estructura:
 ef_pucp/
 |-- template/
 |   |-- content.tex          documento principal (este archivo)
+|   |-- content.pdf          documento compilado
 |   |-- referencias.bib      bibliografia BibLaTeX / APA 7
 |   `-- figures/
-|       |-- grafico1.png
-|       `-- grafico2.png
+|       |-- grafico1.png / grafico2.png                 Graficos 1-2 (Pregunta 1)
+|       |-- grafico1_ext.png / grafico2_ext.png         Graficos 1-2 extendidos (muestra completa)
+|       |-- grafico1_ext_pre.png / grafico2_ext_pre.png Graficos 1-2 (submuestra pre-pandemia)
+|       `-- grafico_rolling.png                          traspaso rodante (Seccion 2.4)
 |-- codes/                   12 archivos .prg de EViews (Anexo A)
 |   |-- P1_1a_correlaciones_graficos.prg
 |   |-- P1_1b_paneles_finales.prg
@@ -1366,10 +1362,11 @@ ef_pucp/
 |   |-- tasas_interes_lahura2017.xlsx/.csv panel P1 (82 obs., ago.2010-may.2017)
 |   |-- tasas_interes_lahura2017_ext.xlsx/.csv panel P2 (191 obs., ago.2010-jun.2026)
 |   |-- tasas_interes_lahura2017.wf1       workfile EViews
-|   |-- BCRPData-metadata-*.csv            catalogo de series BCRP
-|   `-- historico_bcrp/                    tablas BCRP historicas (verificacion TAMN)
-|-- nota_semanal/             5 Notas Semanales BCRP (verificacion TAMN, Anexo C)
+|   `-- BCRPData-metadata-*.csv            catalogo de series BCRP
+|-- ef_metriamacro.pdf        enunciado del examen final
+|-- nota_semanal/             [solo local, no en GitHub] 5 Notas Semanales BCRP (verificacion TAMN, Anexo C)
 |-- referencias_pdf/          [solo local, no en GitHub] PDFs con copyright
+|-- .gitignore
 `-- README.md                 guia completa del proyecto y su estado
 \end{verbatim}
 

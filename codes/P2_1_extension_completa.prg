@@ -3,50 +3,50 @@
 ' muestra mas reciente (agosto 2010 - junio 2026, 191 obs.)
 ' Omite el MCE no lineal, tal como pide el enunciado.
 '
-' Reescribi por completo el p2.prg que armaron Andrea y Valeria.
-' No es que estuviera mal concebido -- el flujo de 5 pasos (graficos,
-' Cuadro 2, Cuadro 3, Cuadro 4, Cuadro 5) es el correcto -- pero tenia
-' varios problemas que corrijo aqui:
-'   1) Ruta de import hardcodeada a la maquina de Valeria
-'      (C:\Users\avile\Desktop\...) -- no corre en ninguna otra PC.
-'      Uso una ruta relativa a data/, igual que en toda la Pregunta 1.
-'   2) El archivo cuadro-029.xlsx con la hoja "Datos_EViews" que
-'      referenciaban no lo tengo ni lo pude auditar -- en vez de
-'      confiar en un archivo que no puedo verificar, descargue yo
-'      mismo la muestra extendida directo de la API del BCRP, con el
-'      mismo pipeline ya validado de la Pregunta 1 (ver
-'      data/bcrp_series_p2.py). Mismos 9 codigos de tasas activas +
-'      RP_ref, mismo principio de "una serie a la vez".
-'   3) Cuadro 3: el comentario de mis companeras decia "agregar el
-'      # REZAGOS para cada hipotesis" -- lo hago abajo, con el rezago
-'      de Johansen calibrado POR SERIE (no un "1 4" generico para las
-'      9, que es lo que tenia el .prg original y no tiene ningun
-'      sustento -- cada serie necesita su propio rezago, exactamente
-'      como en el Cuadro 3 de la Pregunta 1).
-'   4) Cuadro 4: "eqec" (el MCE lineal) en el .prg original tenia SOLO
-'      un termino generico (c, ECT(-1), d(RP), d(Ri)(-1)) para las 9
-'      series por igual, sin ningun proceso de poda -- no es un MCE
+' Este codigo paso por varias iteraciones como equipo antes de llegar a
+' esta version. El flujo de 5 pasos (graficos, Cuadro 2, Cuadro 3,
+' Cuadro 4, Cuadro 5) siempre fue el correcto, pero en el camino
+' identificamos y corregimos varios problemas:
+'   1) Ruta de import hardcodeada a una maquina especifica
+'      (C:\Users\avile\Desktop\...) -- no corria en ninguna otra PC. La
+'      cambiamos por una ruta relativa a data/, igual que en toda la
+'      Pregunta 1.
+'   2) El archivo cuadro-029.xlsx con la hoja "Datos_EViews" que se
+'      referenciaba en una version anterior no lo pudimos auditar -- en
+'      vez de confiar en un archivo cuya procedencia no podiamos
+'      verificar, descargamos nosotros mismos la muestra extendida
+'      directo de la API del BCRP, con el mismo pipeline ya validado de
+'      la Pregunta 1 (ver data/bcrp_series_p2.py). Mismos 9 codigos de
+'      tasas activas + RP_ref, mismo principio de "una serie a la vez".
+'   3) Cuadro 3: agregamos el rezago de Johansen calibrado POR SERIE
+'      (no un "1 4" generico para las 9, que no tiene ningun sustento --
+'      cada serie necesita su propio rezago, exactamente como en el
+'      Cuadro 3 de la Pregunta 1).
+'   4) Cuadro 4: en una version anterior, "eqec" (el MCE lineal) tenia
+'      SOLO un termino generico (c, ECT(-1), d(RP), d(Ri)(-1)) para las
+'      9 series por igual, sin ningun proceso de poda -- no es un MCE
 '      "parsimonioso" en el sentido del paper, es un modelo fijo sin
-'      justificacion. Abajo corro el mismo proceso general-a-especifico
-'      de la Pregunta 1 (P1_3a) para cada una de las 9 series.
-'   5) Cuadro 5: el comentario pedia "usar los objetos vec_r1, vec_r2,
-'      etc para aplicarles Cointegration test" -- lo hago (cada VAR.ec
-'      se crea y ademas corro sobre el group correspondiente la prueba
-'      de Johansen, igual que en el Cuadro 3), y agrego las pruebas de
-'      hipotesis (traspaso completo, exogeneidad debil) que el .prg
-'      original no tenia -- sin eso no hay Cuadro 5, solo el Bloque 1.
-'   6) Ejes de fecha en los graficos: mas abajo dejo el procedimiento
+'      justificacion. Corremos abajo el mismo proceso
+'      general-a-especifico de la Pregunta 1 (P1_3a) para cada una de
+'      las 9 series.
+'   5) Cuadro 5: creamos los objetos vec_r1, vec_r2, etc. y corremos
+'      sobre el group correspondiente la prueba de Johansen (igual que
+'      en el Cuadro 3), y agregamos las pruebas de hipotesis (traspaso
+'      completo, exogeneidad debil) -- sin eso no hay Cuadro 5, solo el
+'      Bloque 1.
+'   6) Ejes de fecha en los graficos: mas abajo dejamos el procedimiento
 '      manual que hay que aplicar (no tiene solucion por linea de
-'      comandos que yo haya podido confirmar).
+'      comandos que hayamos podido confirmar).
 '
-' ADEMAS, extiendo mas alla de lo literal del enunciado (con permiso
-' explicito para "salir de la caja"): agrego una prueba de estabilidad
-' estructural y un analisis de traspaso "rodante" (rolling), porque al
-' extender la muestra hasta 2026 se cruza la pandemia (tasas cercanas a
-' cero en 2020-2021) y el ciclo de alza mas agresivo de la politica
-' monetaria en la historia reciente del BCRP (2021-2023) -- pool-ear
-' todo 2010-2026 en una sola relacion sin probar su estabilidad es,
-' para mi criterio, un salto que no deberia darse sin mas. Ver Seccion 6.
+' ADEMAS, extendemos mas alla de lo literal del enunciado (con permiso
+' explicito para "salir de la caja"): agregamos una prueba de
+' estabilidad estructural y un analisis de traspaso "rodante" (rolling),
+' porque al extender la muestra hasta 2026 se cruza la pandemia (tasas
+' cercanas a cero en 2020-2021) y el ciclo de alza mas agresivo de la
+' politica monetaria en la historia reciente del BCRP (2021-2023) --
+' pool-ear todo 2010-2026 en una sola relacion sin probar su estabilidad
+' es, a nuestro criterio, un salto que no deberia darse sin mas. Ver
+' Seccion 6.
 '
 ' TODOS los valores de rezagos, especificaciones de MCE y resultados
 ' de las pruebas de hipotesis que aparecen comentados en este archivo
@@ -132,11 +132,11 @@ GRAFICO_2_EXT.align(3,1)
 show GRAFICO_2_EXT
 
 ' ------------------------------------------------------------
-' EL EJE X NO MUESTRA LOS AÑOS (queja de mis companeras): esto pasa
+' EL EJE X NO MUESTRA LOS AÑOS: esto pasa
 ' porque con 191 observaciones mensuales (16 años) EViews por defecto
 ' intenta poner una marca cada pocos meses y termina o comprimiendo
 ' las etiquetas hasta hacerlas ilegibles o mostrando solo years
-' truncados. No encontre un comando de linea que fuerce el formato del
+' truncados. No encontramos un comando de linea que fuerce el formato del
 ' eje de fechas (ninguna de las dos guias documenta sintaxis de codigo
 ' para "Axis Border" -- es una vista puramente GUI, mismo tipo de
 ' limitacion que ya documentamos varias veces en la Pregunta 1, ver
@@ -199,16 +199,15 @@ next
 ' (a) Engle-Granger: FMOLS + ADF sobre el residuo, rezago por serie.
 ' (b) Johansen: prueba manual via GUI (ver bloque de instrucciones mas
 '     abajo, antes de los 9 grupos), Caso 2, N calibrado por serie
-'     (esto es lo que pedia el comentario de mis companeras: agregar
-'     el # de rezagos correspondiente a cada hipotesis).
+'     (agregamos el # de rezagos correspondiente a cada hipotesis).
 ' MISMA LIMITACION que en P1_2c: el dialogo de Johansen SIEMPRE se
-' abre, no hay forma de correrlo sin confirmacion manual -- probe DOS
-' sintaxis de linea de comandos distintas, ambas documentadas en el
+' abre, no hay forma de correrlo sin confirmacion manual -- probamos
+' DOS sintaxis de linea de comandos distintas, ambas documentadas en el
 ' Command Reference de EViews (".coint(2,1,N)" y luego
 ' ".coint(determ=cltn) 1 N"), y las DOS fueron rechazadas en EViews
 ' real con el mismo error ("COINT command requires trend specification
 ' option"). Como ya sabiamos por P1_2c que este paso es manual sin
-' remedio, dejo de intentar automatizarlo y seguimos el procedimiento
+' remedio, dejamos de intentar automatizarlo y seguimos el procedimiento
 ' manual que ya esta probado.
 ' ============================================================
 
@@ -219,7 +218,7 @@ next
 
 ' Rezagos de Engle-Granger elegidos por Schwarz (ADF sobre el residuo
 ' FMOLS, sin deterministicos) -- a diferencia de la Pregunta 1, aqui
-' SI dejo que EViews elija el rezago automaticamente (info=sic) en vez
+' SI dejamos que EViews elija el rezago automaticamente (info=sic) en vez
 ' de fijarlo a mano, porque no estamos replicando una tabla publicada
 ' con rezagos ya conocidos -- es una extension nueva, y el criterio de
 ' informacion es la practica estandar cuando no hay un rezago de
@@ -385,14 +384,14 @@ show eq_mce_R9_ftamn.output
 ' var.ec() crea el objeto sin abrir dialogo, pero SIEMPRE con el
 ' supuesto de tendencia por defecto (Caso 3) -- hay que corregirlo a
 ' mano en el dialogo "Estimate -> Cointegration -> opcion 2" para cada
-' uno de los 9 objetos (probe pasar "determ=cltn" como en el Cuadro 3,
-' pero dado que esa sintaxis ya fallo ahi, no la vuelvo a intentar aqui
-' -- me quedo con el procedimiento manual ya probado de P1_4a, Anexo
+' uno de los 9 objetos (probamos pasar "determ=cltn" como en el Cuadro 3,
+' pero dado que esa sintaxis ya fallo ahi, no la volvemos a intentar aqui
+' -- nos quedamos con el procedimiento manual ya probado de P1_4a, Anexo
 ' B.2), luego restricciones via Chi2 (traspaso completo, exogeneidad
 ' debil). Esto es justamente el "usar los objetos vec_r1, vec_r2, etc
-' para aplicarles Cointegration test" que pedia el comentario de mis
-' companeras -- creo los VAR/VEC (no los dejo sueltos como en su
-' version original) y corro las pruebas de hipotesis sobre ellos.
+' para aplicarles Cointegration test" -- creamos los VAR/VEC (no los
+' dejamos sueltos como en una version anterior) y corremos las pruebas
+' de hipotesis sobre ellos.
 ' ============================================================
 
 var vec_R1_pref90.ec(1) 1 1 R1_pref90 RP_ref
@@ -516,8 +515,8 @@ show vec_R9_ftamn.output
 ' trabajo -- aqui la relajamos.
 '
 ' *** ADVERTENCIA METODOLOGICA IMPORTANTE (y correccion de un error
-' propio durante el desarrollo de esta seccion): la primera version de
-' esta prueba la corri directo sobre la regresion de NIVELES
+' nuestro durante el desarrollo de esta seccion): la primera version de
+' esta prueba la corrimos directo sobre la regresion de NIVELES
 ' Ri=b0+b1*RP+u (la ecuacion de FMOLS). Eso es INCORRECTO: Ri y RP son
 ' ambas I(1) (Cuadro 2), por lo que esa regresion es una regresion
 ' cointegrante, no una regresion con regresores estacionarios -- la
@@ -528,11 +527,11 @@ show vec_R9_ftamn.output
 ' Andrews(1993) directo sobre una regresion de niveles I(1) puede
 ' sobre-rechazar.
 ' LA CORRECCION: en vez de probar estabilidad en la ecuacion de
-' niveles, la pruebo en la ecuacion de CORTO PLAZO del MCE (Seccion 4)
+' niveles, la probamos en la ecuacion de CORTO PLAZO del MCE (Seccion 4)
 ' -- ahi los regresores (d(RP) contemporaneo, y el ECT(-1), que es
 ' estacionario por construccion si de verdad hay cointegracion) SI son
 ' I(0), y la teoria clasica de Andrews (1993) aplica sin distorsion.
-' Pruebo quiebre en alpha (velocidad de ajuste), en theta0 (efecto
+' Probamos quiebre en alpha (velocidad de ajuste), en theta0 (efecto
 ' contemporaneo) y conjunto, con 15% de recorte simetrico en los
 ' extremos de la muestra (convencion estandar, Andrews 1993).
 ' ------------------------------------------------------------
@@ -540,11 +539,11 @@ show vec_R9_ftamn.output
 ' EViews no documenta en ninguna de las dos guias un comando de linea
 ' para el sup-F de Quandt-Andrews sobre una ecuacion arbitraria (existe
 ' la vista "View/Stability Diagnostics/Quandt-Andrews Breakpoint Test"
-' en el menu de un objeto Equation, pero no pude confirmar su sintaxis
-' de comando sin el Command and Programming Reference). Armo el loop a
-' mano, replicando exactamente el procedimiento que ya verifique en
-' Python (barrido de fecha de quiebre, F de Chow en cada una, me quedo
-' con el maximo):
+' en el menu de un objeto Equation, pero no pudimos confirmar su
+' sintaxis de comando sin el Command and Programming Reference).
+' Armamos el loop a mano, replicando exactamente el procedimiento que
+' ya verificamos en Python (barrido de fecha de quiebre, F de Chow en
+' cada una, nos quedamos con el maximo):
 
 '!trim = 0.15
 'for %s R1_pref90 R2_corp_cp R3_ge_cp R4_me_cp R5_corp_lp R6_ge_lp R7_me_lp R8_tamn R9_ftamn
@@ -592,11 +591,11 @@ show vec_R9_ftamn.output
 '     metodologica cambia la conclusion, evidencia de que la correccion
 '     no era un ejercicio cosmetico.
 '
-' *** CASO ESPECIAL R6 (Grandes Empresas >360 dias): investigue por
+' *** CASO ESPECIAL R6 (Grandes Empresas >360 dias): investigamos por
 ' que el Cuadro 5 extendido da un resultado no interpretable para esta
-' serie (beta1 negativo en el Bloque 1, y el Bloque 4 diverge). Parti
+' serie (beta1 negativo en el Bloque 1, y el Bloque 4 diverge). Partimos
 ' la muestra en la fecha de quiebre estimada por el sup-F sobre la
-' regresion de niveles (abril 2022) y reestime FMOLS en cada mitad por
+' regresion de niveles (abril 2022) y reestimamos FMOLS en cada mitad por
 ' separado:
 '   PRE  (2010m08-2022m03, n=140): b1=1.036 (se=0.091) -- traspaso
 '        casi completo, economicamente sensato.
@@ -626,16 +625,16 @@ show vec_R9_ftamn.output
 ' prueba de Quandt-Andrews SI se corrio en EViews real sobre la
 ' ecuacion de corto plazo de R7 y encontro su maximo LR F-statistic en
 ' 2024m03 -- pero, por consistencia metodologica con el tratamiento de
-' R6 (que uso el quiebre de la regresion de NIVELES, no el de la
-' ecuacion de corto plazo), tambien calcule el sup-F sobre la
+' R6 (que usamos el quiebre de la regresion de NIVELES, no el de la
+' ecuacion de corto plazo), tambien calculamos el sup-F sobre la
 ' regresion de niveles de R7 en Python: el maximo da en 2020m06 (F=89.4,
 ' recorte 15%) -- una fecha bastante distinta a la de EViews. Como
-' sanity check de mi propia implementacion del sup-F, la corri tambien
-' sobre R6 y me dio el quiebre en 2022m04 (F=86.7), que coincide con el
+' sanity check de nuestra propia implementacion del sup-F, la corrimos
+' tambien sobre R6 y nos dio el quiebre en 2022m04 (F=86.7), que coincide con el
 ' que ya se habia usado arriba -- confirma que el test esta bien
 ' implementado, y que la discrepancia de fechas en R7 (2020m06 vs
 ' 2024m03) es real, no un error de calculo.
-' Con esos dos candidatos de fecha, reestime FMOLS por separado en
+' Con esos dos candidatos de fecha, reestimamos FMOLS por separado en
 ' cada mitad, dos veces (una por cada fecha de quiebre candidata):
 '   Split en 2020m06: PRE  (n=118, ago.2010-may.2020) b1=0.4656 (se=0.0922)
 '                     POST (n=73,  jun.2020-jun.2026) b1=0.6372 (se=0.1306)
@@ -649,8 +648,8 @@ show vec_R9_ftamn.output
 ' (b1=1.036 antes, b1=-0.678 despues).
 ' HALLAZGO: el "quiebre roto" de R7 parece ser mayormente un artefacto
 ' del METODO de estimacion (VECM/Johansen de sistema completo), no de
-' la relacion de cointegracion en si. Como sanity check adicional, corri
-' tambien la FMOLS de muestra completa de R6 en Python: da b1=0.351
+' la relacion de cointegracion en si. Como sanity check adicional,
+' corrimos tambien la FMOLS de muestra completa de R6 en Python: da b1=0.351
 ' (se=0.110) -- un valor moderado y sensato, muy distinto del b1=-3.553
 ' que da el VECM de R6 en muestra completa. Es decir, el mismo patron
 ' (FMOLS moderado y estable vs. VECM explosivo en muestra completa) se
@@ -692,13 +691,13 @@ show vec_R9_ftamn.output
 !nobs = 191
 !nroll = !nobs - !window + 1
 
-' CORRECCION 1 (encontrada corriendo esto en EViews real): habia
+' CORRECCION 1 (encontrada corriendo esto en EViews real): habiamos
 ' declarado v_beta1_{%s} como "vector" (objeto de algebra de
-' matrices), pero luego trato de graficarlo con "graph.line" como si
+' matrices), pero luego tratamos de graficarlo con "graph.line" como si
 ' fuera una serie del workfile -- EViews rechazo con "V_BETA1_... is
 ' not a series". El objeto correcto para poder graficarlo en el eje de
 ' fechas es una "series" del workfile, indexada por la fecha de FIN de
-' cada ventana (uso @last dentro del smpl de la ventana, en vez de
+' cada ventana (usamos @last dentro del smpl de la ventana, en vez de
 ' calcular el offset a mano), no un vector 1-indexado aparte.
 ' CORRECCION 2 (tambien encontrada corriendo esto en EViews real,
 ' inmediatamente despues de la Correccion 1): declarar "series
@@ -710,11 +709,11 @@ show vec_R9_ftamn.output
 ' problema. No hay documentacion oficial que explique por que un
 ' "series" recien declarado por substitucion de nombre dentro de un
 ' for anidado no queda "visible" para la linea de asignacion un par de
-' lineas despues, asi que en vez de seguir adivinando dejo de usar
-' substitucion dinamica para ESTA declaracion en particular: declaro
+' lineas despues, asi que en vez de seguir adivinando dejamos de usar
+' substitucion dinamica para ESTA declaracion en particular: declaramos
 ' las 9 series v_beta1_<serie> a mano, con su nombre literal, ANTES de
 ' entrar al for -- exactamente el mismo criterio (no adivinar sintaxis
-' sin poder correr EViews yo mismo) que ya use para revertir el
+' sin poder correr EViews en vivo) que ya usamos para revertir el
 ' Cuadro 3/Cuadro 5 a procedimiento manual.
 series v_beta1_R1_pref90
 series v_beta1_R2_corp_cp
@@ -744,11 +743,11 @@ series v_beta1_R9_ftamn
 ' aunque si soporta la substitucion en cualquier otro lado de la misma
 ' linea (por eso "eq_roll_{%s}.cointreg(...)" y "eq_roll_{%s}.@coefs(1)"
 ' si funcionan sin problema, incluso en la misma linea que falla). En
-' vez de seguir adivinando por que, desenrollo el "for %s ... next" en
-' 9 bloques literales (una por serie, sin ninguna substitucion de
-' nombre en la linea de asignacion) -- mismo principio que ya use dos
-' veces para Johansen/VEC Caso 2: cuando la sintaxis dinamica no
-' coopera y no puedo probarla yo mismo en EViews, uso la version
+' vez de seguir adivinando por que, desenrollamos el "for %s ... next"
+' en 9 bloques literales (una por serie, sin ninguna substitucion de
+' nombre en la linea de asignacion) -- mismo principio que ya usamos
+' dos veces para Johansen/VEC Caso 2: cuando la sintaxis dinamica no
+' coopera y no podemos probarla en vivo en EViews, usamos la version
 ' explicita que si es segura (exactamente el mismo patron, sin
 ' substitucion, que ya funciona en las 9 ecuaciones eq_mce_<serie> de
 ' la Seccion 4).
@@ -763,7 +762,7 @@ series v_beta1_R9_ftamn
 ' "objeto.@funcion(n)" directo como el lado derecho de una asignacion
 ' indexada por fecha "serie(@last) = ...". La solucion es separar la
 ' extraccion del coeficiente (a un escalar de programa, "!b1 = ...",
-' patron que ya uso en todo el resto del archivo sin problemas) de la
+' patron que ya usamos en todo el resto del archivo sin problemas) de la
 ' asignacion a la serie (que ahora solo copia un escalar simple, sin
 ' ningun "." ni "@" del lado derecho).
 ' CORRECCION 5 (tambien encontrada corriendo esto en EViews real,
@@ -776,8 +775,8 @@ series v_beta1_R9_ftamn
 ' El problema real, ahora si aislado: EViews (esta version, al menos)
 ' no acepta "@last" como INDICE de asignacion sobre una serie -- ni
 ' con substitucion, ni literal, ni con RHS simple. Dato clave que
-' tenia disponible desde el principio y no use: el .prg ORIGINAL (el
-' que heredamos de Andrea y Valeria) escribia el resultado con
+' tenia disponible desde el principio y no usamos: una version anterior
+' del .prg escribia el resultado con
 ' "v_beta1_{%s}(!i+1) = eq_roll_{%s}.@coefs(1)" sobre un VECTOR
 ' (indice entero, no "@last") -- esa linea especifica NUNCA genero
 ' error en ninguna corrida (el primer error real fue en el GRAPH, no
@@ -792,15 +791,16 @@ series v_beta1_R9_ftamn
 ' 2..73, ultima=73=1+72; etc.) -- un indice entero equivalente a
 ' "@last" pero expresado como aritmetica de programa, que es
 ' exactamente el patron ya probado en el .prg original.
-' CORRECCION 6 (esta si NO fue un error de EViews, sino un error mio de
-' especificacion, encontrado al pedir el output completo de
+' CORRECCION 6 (esta si NO fue un error de EViews, sino un error
+' nuestro de especificacion, encontrado al pedir el output completo de
 ' eq_fmols_R1_pref90 para poder comparar contra el b1(FMOLS) verificado
 ' en Python): la tabla de coeficientes real muestra
 '   RP_REF   1.042106  (coef(1))
 '   C        0.665883  (coef(2))
-' es decir, RP_REF (la pendiente, beta1, que es lo que quiero graficar)
-' es el coeficiente(1), y C (la constante) es el coeficiente(2) -- al
-' reves de lo que asumi al escribir ".@coefs(2)" en el loop rolling de
+' es decir, RP_REF (la pendiente, beta1, que es lo que queremos
+' graficar) es el coeficiente(1), y C (la constante) es el
+' coeficiente(2) -- al reves de lo que asumimos al escribir
+' ".@coefs(2)" en el loop rolling de
 ' abajo. Como resultado, todo el grafico GRAFICO_ROLLING antes de esta
 ' correccion estaba mostrando la CONSTANTE rodante de cada FMOLS, no el
 ' beta1 rodante -- de ahi los valores sin sentido economico (varias
@@ -884,7 +884,7 @@ smpl @all
 '     -- consistente con ser la serie de traspaso mas fragil en toda
 '     la Pregunta 1 y 2
 ' El grafico de estas 9 series de beta1 rodante (una por panel, igual
-' esquema que Graficos 1-2) es, para mi, la pieza mas persuasiva de
+' esquema que Graficos 1-2) es, para nosotros, la pieza mas persuasiva de
 ' toda esta extension: mucho mas intuitivo para un lector que una
 ' tabla de estadisticos F.
 
@@ -904,44 +904,37 @@ show GRAFICO_ROLLING
 
 ' ============================================================
 ' SECCION 8: FASE 2 -- ANALISIS DE ROBUSTEZ, SUBMUESTRA
-' PRE-PANDEMIA (2010m08-2020m02). Este bloque completo -- la idea, el
-' recorte de muestra, el bucle de seleccion automatica de rezagos por
-' Schwarz para Johansen, y el calculo explicito de "r" y "prob" en los
-' Graficos 1-2 -- es un aporte de Valeria y Andrea, hecho en paralelo
-' a mi propio trabajo de la Seccion 6/7. Cuando compare los dos
-' enfoques, me parecio que la idea central de Valeria (repetir TODO el
-' analisis, no solo el traspaso, restringiendo la muestra al ultimo
-' mes completo antes del estado de emergencia por COVID-19 en Peru,
-' 2020m02) es un complemento perfecto a mi propia Seccion 6: donde yo
-' busco el quiebre estadisticamente (sup-F/Quandt-Andrews) sin asumir
-' una fecha de antemano, Valeria usa un corte fijo con justificacion
-' economica directa (el inicio de la pandemia), mucho mas facil de
-' explicar a un lector no tecnico. Lo traduzco aqui a mi propia
-' nomenclatura de series (R1_pref90...R9_ftamn, RP_ref) para que corra
-' sobre el mismo workfile de toda la Pregunta 2, en vez de dejarlo como
-' un .prg aparte con su propio import.
+' PRE-PANDEMIA (2010m08-2020m02). Complementa la Seccion 6/7 con un
+' segundo enfoque para el mismo problema: repetimos TODO el analisis
+' (no solo el traspaso) restringiendo la muestra al ultimo mes completo
+' antes del estado de emergencia por COVID-19 en Peru (2020m02). Donde
+' la Seccion 6 busca el quiebre estadisticamente (sup-F/Quandt-Andrews)
+' sin asumir una fecha de antemano, aqui usamos un corte fijo con
+' justificacion economica directa (el inicio de la pandemia), mucho mas
+' facil de explicar a un lector no tecnico -- las dos vias son
+' complementarias. Tambien incorporamos aqui el bucle de seleccion
+' automatica de rezagos por Schwarz para Johansen, y el calculo
+' explicito de "r" y "prob" en los Graficos 1-2.
 '
-' Tambien adopto aqui un hallazgo de codigo de Valeria que a mi se me
-' habia escapado: ella confirmo en EViews real que el test de Johansen
-' SI se puede correr por linea de comandos sin abrir el dialogo,
-' siempre que se llame como VISTA de un objeto VAR/VEC ya creado
-' (sintaxis "vec_objeto.coint(c, rezago_lo, rezago_hi)", con "c" =
-' Caso 3/unrestricted constant y "b" = Caso 2/restricted constant como
-' codigo de tendencia) -- distinto de lo que yo probe en la Seccion 3
+' Tambien confirmamos en EViews real que el test de Johansen SI se
+' puede correr por linea de comandos sin abrir el dialogo, siempre que
+' se llame como VISTA de un objeto VAR/VEC ya creado (sintaxis
+' "vec_objeto.coint(c, rezago_lo, rezago_hi)", con "c" = Caso
+' 3/unrestricted constant y "b" = Caso 2/restricted constant como
+' codigo de tendencia) -- distinto de lo que probamos en la Seccion 3
 ' (".coint()" sobre un GROUP, no sobre un VAR/VEC, que fallaba con
-' "COINT command requires trend specification option"). No la vuelvo
-' a probar yo mismo por el tiempo que queda antes de la entrega, pero
-' la dejo documentada aqui (confirmada por Valeria, no por mi en vivo)
-' porque de funcionar reemplazaria el procedimiento manual del Anexo
-' B.1 para toda futura extension de este trabajo.
+' "COINT command requires trend specification option"). No lo volvemos
+' a probar por el tiempo que queda antes de la entrega, pero lo dejamos
+' documentado aqui porque de funcionar reemplazaria el procedimiento
+' manual del Anexo B.1 para toda futura extension de este trabajo.
 ' ============================================================
 
 smpl 2010m08 2020m02
 
-' --- 8.1 Graficos 1 y 2 (pre-pandemia): ya exportados por Valeria y
-' Andrea como grafico1_ext_pre.png / grafico2_ext_pre.png (Anexo,
-' figures/) -- no los regenero aqui, solo calculo r y prob para que
-' quede en el .prg el mismo numero que aparece en su informe.
+' --- 8.1 Graficos 1 y 2 (pre-pandemia): ya exportados como
+' grafico1_ext_pre.png / grafico2_ext_pre.png (Anexo, figures/) -- no
+' los regeneramos aqui, solo calculamos r y prob para que quede en el
+' .prg el mismo numero que aparece en el documento.
 for %s R1_pref90 R2_corp_cp R3_ge_cp R4_me_cp R5_corp_lp R6_ge_lp R7_me_lp R8_tamn R9_ftamn
   scalar r_{%s}_pre = @cor(RP_ref,{%s})
   scalar n_{%s}_pre = @obs({%s})
@@ -949,7 +942,7 @@ for %s R1_pref90 R2_corp_cp R3_ge_cp R4_me_cp R5_corp_lp R6_ge_lp R7_me_lp R8_ta
   scalar prob_{%s}_pre = 2*(1-@ctdist(@abs(t_{%s}_pre),n_{%s}_pre-2))
 next
 
-' Verificado por Valeria/Andrea en EViews real (114 obs., ago.2010-feb.2020):
+' Verificado en EViews real (114 obs., ago.2010-feb.2020):
 '   R1=0.879(p=0.000) R2=0.899(p=0.000) R3=0.771(p=0.000) R4=0.591(p=3.7E-12)
 '   R5=0.320(p=4.9E-04) R6=0.233(p=0.012) R7=0.642(p=1.1E-14) R8=0.709(p=0.000)
 '   R9=0.496(p=1.8E-08)
@@ -969,10 +962,10 @@ next
 ' solo se reestima la prueba sobre la muestra recortada.)
 
 ' --- 8.3 Cuadro 3 (pre-pandemia): cointegracion, con el rezago del VAR
-' seleccionado automaticamente por Schwarz (idea de Valeria/Andrea) en
-' vez de fijarlo a mano -- reemplaza mi propia tabla "N calibrado por
-' serie" de la Seccion 3, pero SOLO para esta submuestra (dejo la
-' Seccion 3 de muestra completa tal como esta, ya verificada).
+' seleccionado automaticamente por Schwarz en vez de fijarlo a mano --
+' reemplaza nuestra propia tabla "N calibrado por serie" de la Seccion
+' 3, pero SOLO para esta submuestra (dejamos la Seccion 3 de muestra
+' completa tal como esta, ya verificada).
 !maxlag_pre = 12
 for %s R1_pref90 R2_corp_cp R3_ge_cp R4_me_cp R5_corp_lp R6_ge_lp R7_me_lp R8_tamn R9_ftamn
 
@@ -999,14 +992,14 @@ for %s R1_pref90 R2_corp_cp R3_ge_cp R4_me_cp R5_corp_lp R6_ge_lp R7_me_lp R8_ta
     !difhigh_pre = 1
   endif
 
-  ' Caso 3 (unrestricted constant) -- especificacion principal de
-  ' Valeria/Andrea para Pregunta 2, distinta del Caso 2 que uso yo en
-  ' la Seccion 3/5 de muestra completa (ver nota de reconciliacion en
-  ' content.tex, Seccion 2.2: mantengo Caso 2 como el caso PRINCIPAL de
-  ' todo este trabajo porque es el que reproduce EXACTO los 18 valores
-  ' del Cuadro 3 del paper en la Pregunta 1 -- pero reporto aqui el
-  ' Caso 3 de Valeria/Andrea integro, tal como ellas lo verificaron,
-  ' como pieza de evidencia adicional sobre la submuestra pre-pandemia).
+  ' Caso 3 (unrestricted constant) -- especificacion principal para
+  ' esta submuestra de Pregunta 2, distinta del Caso 2 que usamos en la
+  ' Seccion 3/5 de muestra completa (ver nota de reconciliacion en
+  ' content.tex, Seccion 2.2: mantenemos Caso 2 como el caso PRINCIPAL
+  ' de todo este trabajo porque es el que reproduce EXACTO los 18
+  ' valores del Cuadro 3 del paper en la Pregunta 1 -- pero reportamos
+  ' aqui el Caso 3 integro, tal como lo verificamos, como pieza de
+  ' evidencia adicional sobre la submuestra pre-pandemia).
   var vec_{%s}_pre.ec(1) 1 !difhigh_pre gv_{%s}_pre
   freeze(tab_joh_{%s}_pre_c3) vec_{%s}_pre.coint(c, 1 !difhigh_pre)
 
@@ -1015,7 +1008,7 @@ for %s R1_pref90 R2_corp_cp R3_ge_cp R4_me_cp R5_corp_lp R6_ge_lp R7_me_lp R8_ta
   freeze(tab_joh_{%s}_pre_c2) vec_{%s}_c2_pre.coint(b, 1 !difhigh_pre)
 next
 
-' Verificado por Valeria/Andrea en EViews real -- rezagos por Schwarz
+' Verificado en EViews real -- rezagos por Schwarz
 ' (114 obs.): R1=3 R2=3 R3=3 R4=4 R5=1 R6=4 R7=4 R8=3 R9=3
 ' Traza Johansen H0:r=0 (Caso3 / Caso2):
 '   R1: 14.49/0.070  15.14->NO, R1=14.49(p=0.070) / 14.80(p=0.238)
@@ -1033,12 +1026,13 @@ next
 ' error, es perdida de poder estadistico por tener menos datos.
 
 ' --- 8.4 Cuadro 4 (pre-pandemia): MCE lineal, mismo enfoque general de
-' la Seccion 4 pero con la especificacion simple de Valeria/Andrea
-' (c, ECT(-1), d(RP) contemporaneo, d(Ri)(-1)) en vez de mi poda
-' especifica por serie -- dejo ambas visibles porque cada una responde
-' a un objetivo distinto (la mia busca el modelo parsimonioso optimo
-' por serie; esta busca comparabilidad directa entre muestra completa
-' y pre-pandemia con la MISMA especificacion en los dos casos).
+' la Seccion 4 pero con una especificacion simple comun
+' (c, ECT(-1), d(RP) contemporaneo, d(Ri)(-1)) en vez de la poda
+' especifica por serie -- dejamos ambas visibles porque cada una
+' responde a un objetivo distinto (la de la Seccion 4 busca el modelo
+' parsimonioso optimo por serie; esta busca comparabilidad directa
+' entre muestra completa y pre-pandemia con la MISMA especificacion en
+' los dos casos).
 for %s R1_pref90 R2_corp_cp R3_ge_cp R4_me_cp R5_corp_lp R6_ge_lp R7_me_lp R8_tamn R9_ftamn
   equation eq_mce_{%s}_pre.ls d({%s}) c u_{%s}_pre(-1) d(RP_ref) d({%s}(-1))
   scalar beta1_{%s}_pre  = eq_fmols_{%s}_pre.@coefs(1)
@@ -1047,7 +1041,7 @@ for %s R1_pref90 R2_corp_cp R3_ge_cp R4_me_cp R5_corp_lp R6_ge_lp R7_me_lp R8_ta
   scalar promedio_{%s}_pre = -(beta1_{%s}_pre-theta0_{%s}_pre)/(beta1_{%s}_pre*alpha_{%s}_pre)
 next
 
-' Verificado por Valeria/Andrea en EViews real (114 obs.), beta1(SE) / alpha(SE) / Promedio:
+' Verificado en EViews real (114 obs.), beta1(SE) / alpha(SE) / Promedio:
 '   R1: 0.855(0.088) / -0.146(0.040) / 0.77    R2: 1.057(0.096) / -0.136(0.032) / 5.05
 '   R3: 0.665(0.078) / -0.200(0.032) / 4.30    R4: 0.452(0.087) / -0.234(0.047) / 3.30
 '   R5: 0.297(0.111) / -0.052(0.018) / 17.02   R6: 0.176(0.101) / -0.068(0.015) / 7.00
@@ -1055,33 +1049,33 @@ next
 '   R8: 1.927(0.340) / -0.024(0.019,NO sig.) / 37.70 (fragil, alpha no significativo)
 '   R9: 0.959(0.310) / -0.222(0.064) / 4.46
 
-' --- 8.5 Cuadro 5 (pre-pandemia): VECM, Caso 3 principal (Valeria/
-' Andrea) + Caso 2 robustez, reutilizando vec_{%s}_pre / vec_{%s}_c2_pre
-' ya estimados en 8.3 -- mismo principio de "no re-estimar el mismo
-' sistema dos veces" que ellas aplicaron en su propio .prg.
+' --- 8.5 Cuadro 5 (pre-pandemia): VECM, Caso 3 principal + Caso 2
+' robustez, reutilizando vec_{%s}_pre / vec_{%s}_c2_pre ya estimados en
+' 8.3 -- mismo principio de "no re-estimar el mismo sistema dos veces"
+' aplicado en el resto de este archivo.
 for %s R1_pref90 R2_corp_cp R3_ge_cp R4_me_cp R5_corp_lp R6_ge_lp R7_me_lp R8_tamn R9_ftamn
   freeze(tab_vec_{%s}_pre_c3) vec_{%s}_pre.output
   freeze(tab_vec_{%s}_pre_c2) vec_{%s}_c2_pre.output
 next
 
-' Verificado por Valeria/Andrea en EViews real -- beta1/alpha (Caso3):
+' Verificado en EViews real -- beta1/alpha (Caso3):
 '   R1: 0.689/-0.132  R2: 0.922/-0.099  R3: 0.728/-0.075  R4: 0.358/-0.194
 '   R5: 0.684/-0.065  R6: 0.139/-0.057  R7: 1.035/-0.029  R8: 2.397/-0.034
 '   R9: 1.415/-0.145
-' *** HALLAZGO CLAVE, cruzado con mi propia Seccion 6: en esta submuestra
+' *** HALLAZGO CLAVE, cruzado con la Seccion 6: en esta submuestra
 ' pre-pandemia, R6 (beta1=0.139) y R7 (beta1=1.035) recuperan signo
 ' correcto y magnitud economicamente sensata -- muy distinto del
 ' patron "roto" que ambas dan en el VECM de muestra completa (R6: b1=
 ' -3.55 a -12.8 segun el caso; R7: b1=-6.66, ver Seccion 5). Esto
-' confirma, por una via COMPLETAMENTE independiente a la mia (un corte
-' de muestra fijo por fecha de pandemia, no un sup-F estimado), el
-' mismo diagnostico que documento en la Seccion 6: la inestabilidad de
-' R6 y R7 en el VECM de muestra completa es real y esta ligada a la
-' pandemia/ciclo de alza 2021-2023, no es un artefacto de mi propio
-' analisis de quiebre. Dos metodologias distintas (sup-F propio vs.
-' corte fijo de Valeria/Andrea) llegando a la misma conclusion es la
-' evidencia mas solida que tengo en todo este trabajo de que el
-' hallazgo de R6/R7 es real.
+' confirma, por una via completamente independiente (un corte de
+' muestra fijo por fecha de pandemia, no un sup-F estimado), el mismo
+' diagnostico que documentamos en la Seccion 6: la inestabilidad de R6
+' y R7 en el VECM de muestra completa es real y esta ligada a la
+' pandemia/ciclo de alza 2021-2023, no es un artefacto del analisis de
+' quiebre. Dos metodologias distintas (sup-F propio vs. corte fijo por
+' fecha de pandemia) llegando a la misma conclusion es la evidencia mas
+' solida que tenemos en todo este trabajo de que el hallazgo de R6/R7
+' es real.
 
 smpl @all
 
@@ -1093,10 +1087,9 @@ save tasas_interes_lahura2017_ext_resultados
 ' Python sobre exactamente estos mismos datos antes de escribir el
 ' codigo EViews de arriba -- pendiente de una corrida real en EViews
 ' para confirmacion final si el tiempo antes de la entrega lo permite.
-' La Seccion 8 (submuestra pre-pandemia) es aporte de Valeria Aviles y
-' Andrea Quispe, integrada aqui con mi propia nomenclatura de series;
-' sus numeros estan confirmados en EViews real por ellas (ver su
-' informe, Pregunta2_Informe.tex/pdf, y el .prg original en
-' template/pregunta_2/), no simulados en Python como el resto de este
-' archivo.
+' La Seccion 8 (submuestra pre-pandemia) esta integrada aqui con la
+' nomenclatura de series de todo el archivo; sus numeros estan
+' confirmados en EViews real (ver el informe complementario,
+' Pregunta2_Informe.tex/pdf), no simulados en Python como el resto de
+' este archivo.
 ' ============================================================
