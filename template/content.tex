@@ -691,7 +691,7 @@ Grandes Emp.\ $\le$360d  & 0.82 & $-0.12$\rlap{*} & 0.04         & 7.7  & \\
 Medianas Emp.\ $\le$360d & 0.68 & $-0.15$\rlap{*} & 0.19\rlap{*} & 4.9  & \\
 Corporativa $>$360d      & 0.28 & $-0.02$\rlap{*} & $-0.02$      & 46.8 & Traspaso ya débil en P1 \\
 Grandes Emp.\ $>$360d    & 0.35 & $-0.01$         & $-0.39$      & (208)\tnote{a} & $\alpha$ no significativo \\
-Medianas Emp.\ $>$360d   & 0.57 & $-0.01$\rlap{\textdagger} & $-0.13$ & (97.6)\tnote{a} & $\alpha$ marginal (10\,\%) \\
+Medianas Emp.\ $>$360d   & 0.57 & $-0.01$ & $-0.13$ & (97.6)\tnote{a} & $\alpha$ no significativo \\
 TAMN                     & 0.51 & $-0.01$\rlap{\textdagger} & 0.00         & (75.4)\tnote{a} & $\alpha$ marginal (10\,\%) \\
 FTAMN                    & 2.16 & $-0.05$\rlap{\textdagger} & 0.36         & 15.7 & $\alpha$ marginal (10\,\%) \\
 \bottomrule
@@ -700,11 +700,14 @@ FTAMN                    & 2.16 & $-0.05$\rlap{\textdagger} & 0.36         & 15.
 \footnotesize
 \item * $p<0.05$; \textdagger\ $p<0.10$ (marginal). MCE con errores
 HAC (Newey-West, Bartlett). $\beta_1$, $\alpha$ y $\theta_0$
-verificados en Python sobre los mismos 191 datos, pendientes de
-confirmación final en EViews real (Anexo~A.10).
+verificados cruzando con la corrida real en EViews (Anexo~A.10); la
+única corrección que introdujo esa verificación fue la fila de
+Medianas Empresas $>$360d (R7): en Python su $\alpha$ había salido
+marginal ($p=0.090$), pero en EViews real resultó no significativo
+($p=0.124$) -- ver nota [a].
 \item[a] El Promedio (meses) se reporta entre paréntesis y en cursiva
-conceptual porque $\alpha$ no es significativo (R6) o solo lo es al
-margen del 10\,\% (R7, R8, R9): dividir entre un $\alpha$
+conceptual porque $\alpha$ no es significativo (R6, R7) o solo lo es
+al margen del 10\,\% (R8, R9): dividir entre un $\alpha$
 estadísticamente indistinguible de cero produce una cifra que es un
 artefacto aritmético, no una estimación informativa del tiempo de
 ajuste. No deberían leerse con la misma confianza que las 5 filas
@@ -731,12 +734,18 @@ patrón: en 8 de las 9 series se rechaza el traspaso completo
 (solo Preferencial 90d no rechaza ninguna de las dos hipótesis, igual
 que en la muestra 2010--2017 del paper original -- ese resultado
 particular sí es robusto a la extensión de la muestra). Para
-\textbf{Grandes Empresas $>$360 días (R6) el Cuadro 5 extendido no
-produce un resultado interpretable}: el bloque sin restricciones da
-$\beta_1=-3.55$ (signo económicamente absurdo) con una raíz de ajuste
-positiva ($\alpha=0.008>0$, explosiva en vez de correctora), y el
-bloque restringido (solo exogeneidad débil) diverge en vez de
-converger a un valor razonable. La Sección~2.4 explica por qué.
+\textbf{Grandes Empresas $>$360 días (R6) y Medianas Empresas $>$360
+días (R7) el Cuadro 5 extendido no produce un resultado
+interpretable}: el bloque sin restricciones da $\beta_1=-3.55$ para R6
+y $\beta_1=-6.66$ para R7 (signo económicamente absurdo en ambas) con
+una raíz de ajuste positiva ($\alpha=0.008$ y $\alpha=0.0057$
+respectivamente, explosiva en vez de correctora), y el bloque
+restringido (solo exogeneidad débil) diverge en las dos series en vez
+de converger a un valor razonable. El hallazgo de R7 no estaba
+anticipado por la verificación en Python (que asumía $\beta_1=2.74$
+para esta serie) -- solo apareció al correr el VECM real en EViews. La
+Sección~2.4 explica por qué, y extiende a R7 la misma investigación de
+sub-muestra ya hecha para R6.
 
 %%-------------------------------------------------------------
 \subsection{Estabilidad estructural del traspaso: hallazgo central
@@ -791,8 +800,16 @@ FTAMN                    &  6.37         &  9.01\rlap{*} &  9.43\rlap{*} \\
 * Significativo al 10\,\%. Valores críticos aproximados (recorte
 15\,\%, \textcite{andrews1993}/\textcite{andrewsploberger1994}):
 4.87/5.94/8.53 (1 restricción) y 6.42/7.63/10.42 (3 restricciones) a
-10/5/1\,\%. Estadísticos verificados en Python; pendiente confirmación
-en EViews real.
+10/5/1\,\%. Esta descomposición ($F$ conjunto/solo $\alpha$/solo
+$\theta_0$) es un cálculo propio en Python, porque EViews no ofrece
+una vista que decomponga el sup-$F$ de esta manera. Como confirmación
+complementaria (más gruesa, sin la descomposición), sí se corrió en
+EViews real la prueba de Quandt-Andrews estándar (\emph{View
+$\to$ Stability Diagnostics $\to$ Quandt-Andrews Breakpoint Test})
+sobre la ecuación de corto plazo de cada serie: para Medianas Empresas
+$>$360d (R7) encontró su máximo estadístico LR-$F$ en 2024m03,
+consistente con la inestabilidad ya señalada aquí para esa serie (ver
+``Caso especial R7'' más abajo).
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -830,6 +847,49 @@ menor volumen de operaciones, el tipo de serie más expuesta a que el
 ciclo de alza 2021--2023 contrajera la demanda de crédito largo de
 forma no proporcional al alza de la tasa de política.
 
+\textbf{El caso de Medianas Empresas $>$360 días (R7).} La corrida
+real del VECM en EViews reveló, sin haberlo anticipado la verificación
+en Python, que R7 exhibe exactamente el mismo patrón ``roto'' que R6:
+$\beta_1=-6.66$ y $\alpha=+0.0057$ en el Bloque~1 sin restricciones
+(signo económicamente absurdo, raíz explosiva en vez de correctora).
+Investigamos esta serie con el mismo tratamiento que R6, con una
+complicación adicional: a diferencia de R6, para R7 la prueba de
+Quandt-Andrews sobre la ecuación de corto plazo (corrida en EViews
+real) y el sup-$F$ sobre la regresión de niveles (calculado en Python,
+por consistencia metodológica con el tratamiento de R6) señalan
+\textbf{fechas de quiebre distintas} -- 2024m03 la primera, 2020m06 la
+segunda. Como verificación de que esta discrepancia es real y no un
+error de la implementación propia del sup-$F$, la misma prueba
+aplicada a R6 recupera el quiebre de abril de 2022 ya reportado
+arriba, lo que confirma que el procedimiento está bien implementado.
+
+Reestimamos FMOLS por separado en las dos mitades de la muestra, para
+cada una de las dos fechas candidatas: con el quiebre de 2020m06,
+$\beta_1=0.47$ (EE$=0.09$) antes y $\beta_1=0.64$ (EE$=0.13$) después;
+con el de 2024m03, $\beta_1=0.57$ (EE$=0.16$) antes y $\beta_1=0.34$
+(EE$=0.17$) después (el FMOLS de muestra completa, sin partir, da
+$\beta_1=0.57$, EE$=0.14$). En \textbf{ninguna} de las cuatro
+sub-muestras el coeficiente cambia de signo -- se mantiene en un rango
+moderado y económicamente sensato (0.34 a 0.64) -- a diferencia de R6,
+donde el mismo ejercicio (FMOLS pre/post) sí produce una inversión de
+signo real (de 1.04 a $-0.68$). Como verificación adicional, calculamos
+también el FMOLS de muestra completa para R6: da $\beta_1=0.35$
+(EE$=0.11$), un valor moderado y sensato, muy distinto del
+$\beta_1=-3.55$ que arroja su VECM de muestra completa -- el mismo
+patrón (FMOLS estable, VECM explosivo) se repite en R6 y en R7.
+
+La lectura más defendible, con esta evidencia, es que el patrón
+``roto'' de R7 refleja sobre todo una \textbf{fragilidad del método de
+estimación de sistema completo (VECM/Johansen)}, no necesariamente un
+quiebre real en la relación de cointegración de largo plazo entre R7 y
+$RP$: R7 ya cointegraba solo al margen del 10\,\% por Engle-Granger
+($p=0.054$, Cuadro 3), y el estimador de sistema completo es
+conocidamente más sensible que el uniecuacional (Engle-Granger/FMOLS)
+cuando la cointegración de partida ya es marginal. Esto contrasta con
+R6, donde el propio FMOLS -- no solo el VECM -- muestra una inversión
+de signo real al partir la muestra, evidencia de que ahí sí hay un
+quiebre genuino en el vector de cointegración.
+
 Como evidencia complementaria -- y más intuitiva que una tabla de
 estadísticos $F$ -- estimamos el efecto traspaso en ventanas móviles
 de 72 meses (Gráfico~3, pendiente de exportar desde EViews, Anexo~A.10).
@@ -839,10 +899,19 @@ junio de 2026); FTAMN muestra el patrón inverso, de 1.29 a 1.86.
 
 \textbf{Conclusión de esta sección.} La muestra extendida no debería
 tratarse como una única relación estable de traspaso para las 9
-series por igual. Un tratamiento riguroso y completo de esta
-extensión requeriría, como mínimo, permitir un quiebre estructural
-endógeno en la relación de cointegración misma para las series donde
-el quiebre es más severo (R6, y en menor medida R7 y R8) --
+series por igual. R6 y R7 son los dos casos donde el VECM de muestra
+completa deja de ser interpretable, pero por razones que no son
+idénticas: en R6 la propia relación de cointegración (el FMOLS
+uniecuacional) cambia de signo al partir la muestra, evidencia de un
+quiebre genuino; en R7 el FMOLS se mantiene razonablemente estable en
+todas las sub-muestras, y el diagnóstico más plausible es que sea el
+método de estimación de sistema completo el que se vuelve frágil
+cuando la cointegración de partida ya es marginal, más que un cambio
+real en la relación de largo plazo. Un tratamiento riguroso y completo
+de esta extensión requeriría, como mínimo, permitir un quiebre
+estructural endógeno en la relación de cointegración misma para R6 (y,
+en menor medida, contrastar formalmente la hipótesis de fragilidad del
+método frente a la de quiebre genuino para R7 y R8) --
 metodologías como \textcite{gregoryhansen1996} (que extiende
 Engle-Granger a un quiebre endógeno en la regresión de cointegración)
 o la extensión de Johansen con quiebre de \textcite{johansenmosconinielsen2000}
