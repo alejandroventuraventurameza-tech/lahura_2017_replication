@@ -687,59 +687,82 @@ series v_beta1_R9_ftamn
 ' explicita que si es segura (exactamente el mismo patron, sin
 ' substitucion, que ya funciona en las 9 ecuaciones eq_mce_<serie> de
 ' la Seccion 4).
+' CORRECCION 4 (tambien encontrada corriendo esto en EViews real,
+' inmediatamente despues de la Correccion 3): con las 9 lineas ya
+' completamente literales (sin NINGUNA substitucion, ni siquiera de
+' {%s}), EViews igual rechazo "v_beta1_R1_pref90(@last) =
+' eq_roll_R1_pref90.@coefs(2)" con "Syntax error" -- esto descarta
+' definitivamente que el problema fuera de substitucion de texto (las
+' Correcciones 2 y 3 apuntaban en la direccion equivocada). El
+' problema real es mas simple: EViews no acepta encadenar
+' "objeto.@funcion(n)" directo como el lado derecho de una asignacion
+' indexada por fecha "serie(@last) = ...". La solucion es separar la
+' extraccion del coeficiente (a un escalar de programa, "!b1 = ...",
+' patron que ya uso en todo el resto del archivo sin problemas) de la
+' asignacion a la serie (que ahora solo copia un escalar simple, sin
+' ningun "." ni "@" del lado derecho).
 
 for !i = 0 to !nroll-1
   smpl @first+!i @first+!i+!window-1
   equation eq_roll_R1_pref90.cointreg(method=fmols,trend=c) R1_pref90 RP_ref
-  v_beta1_R1_pref90(@last) = eq_roll_R1_pref90.@coefs(2)
+  !b1 = eq_roll_R1_pref90.@coefs(2)
+  v_beta1_R1_pref90(@last) = !b1
 next
 
 for !i = 0 to !nroll-1
   smpl @first+!i @first+!i+!window-1
   equation eq_roll_R2_corp_cp.cointreg(method=fmols,trend=c) R2_corp_cp RP_ref
-  v_beta1_R2_corp_cp(@last) = eq_roll_R2_corp_cp.@coefs(2)
+  !b1 = eq_roll_R2_corp_cp.@coefs(2)
+  v_beta1_R2_corp_cp(@last) = !b1
 next
 
 for !i = 0 to !nroll-1
   smpl @first+!i @first+!i+!window-1
   equation eq_roll_R3_ge_cp.cointreg(method=fmols,trend=c) R3_ge_cp RP_ref
-  v_beta1_R3_ge_cp(@last) = eq_roll_R3_ge_cp.@coefs(2)
+  !b1 = eq_roll_R3_ge_cp.@coefs(2)
+  v_beta1_R3_ge_cp(@last) = !b1
 next
 
 for !i = 0 to !nroll-1
   smpl @first+!i @first+!i+!window-1
   equation eq_roll_R4_me_cp.cointreg(method=fmols,trend=c) R4_me_cp RP_ref
-  v_beta1_R4_me_cp(@last) = eq_roll_R4_me_cp.@coefs(2)
+  !b1 = eq_roll_R4_me_cp.@coefs(2)
+  v_beta1_R4_me_cp(@last) = !b1
 next
 
 for !i = 0 to !nroll-1
   smpl @first+!i @first+!i+!window-1
   equation eq_roll_R5_corp_lp.cointreg(method=fmols,trend=c) R5_corp_lp RP_ref
-  v_beta1_R5_corp_lp(@last) = eq_roll_R5_corp_lp.@coefs(2)
+  !b1 = eq_roll_R5_corp_lp.@coefs(2)
+  v_beta1_R5_corp_lp(@last) = !b1
 next
 
 for !i = 0 to !nroll-1
   smpl @first+!i @first+!i+!window-1
   equation eq_roll_R6_ge_lp.cointreg(method=fmols,trend=c) R6_ge_lp RP_ref
-  v_beta1_R6_ge_lp(@last) = eq_roll_R6_ge_lp.@coefs(2)
+  !b1 = eq_roll_R6_ge_lp.@coefs(2)
+  v_beta1_R6_ge_lp(@last) = !b1
 next
 
 for !i = 0 to !nroll-1
   smpl @first+!i @first+!i+!window-1
   equation eq_roll_R7_me_lp.cointreg(method=fmols,trend=c) R7_me_lp RP_ref
-  v_beta1_R7_me_lp(@last) = eq_roll_R7_me_lp.@coefs(2)
+  !b1 = eq_roll_R7_me_lp.@coefs(2)
+  v_beta1_R7_me_lp(@last) = !b1
 next
 
 for !i = 0 to !nroll-1
   smpl @first+!i @first+!i+!window-1
   equation eq_roll_R8_tamn.cointreg(method=fmols,trend=c) R8_tamn RP_ref
-  v_beta1_R8_tamn(@last) = eq_roll_R8_tamn.@coefs(2)
+  !b1 = eq_roll_R8_tamn.@coefs(2)
+  v_beta1_R8_tamn(@last) = !b1
 next
 
 for !i = 0 to !nroll-1
   smpl @first+!i @first+!i+!window-1
   equation eq_roll_R9_ftamn.cointreg(method=fmols,trend=c) R9_ftamn RP_ref
-  v_beta1_R9_ftamn(@last) = eq_roll_R9_ftamn.@coefs(2)
+  !b1 = eq_roll_R9_ftamn.@coefs(2)
+  v_beta1_R9_ftamn(@last) = !b1
 next
 
 smpl @all
