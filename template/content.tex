@@ -44,6 +44,7 @@
 %% --- Figuras ---
 \usepackage{graphicx}
 \usepackage{subcaption}
+\usepackage{float}
 \graphicspath{{figures/}}
 
 %% --- Código fuente (EViews, Python) ---
@@ -727,10 +728,10 @@ en vez de fijar un rezago común para las 9 series:
 
 \begin{table}[ht]
 \renewcommand{\thetable}{9}
-\begin{threeparttable}
 \caption{Número de rezagos del VAR (criterio de Schwarz), muestra
          extendida 2010--2026}
 \label{tab:rezagosext}
+\centering
 \small
 \begin{tabular}{lccccccccc}
 \toprule
@@ -784,7 +785,7 @@ FTAMN                    & 16.66 & 0.0333 & 17.16 & 0.1268 \\
 \begin{tablenotes}[flushleft]
 \footnotesize\item
 Los coeficientes de largo plazo son casi idénticos entre casos
-(diferencias $<2\,\%$, salvo R6--R7 -- ver Cuadro~5 extendido), pero
+(diferencias menores al 2\,\%, salvo R6--R7 -- ver Cuadro~5 extendido), pero
 los $p$-valores del test de traza sí difieren sustancialmente
 (consistentemente mayores bajo el Caso 2, que tiene un parámetro libre
 menos), lo que cambia la conclusión binaria de cointegración al 5\,\%
@@ -942,10 +943,10 @@ simple de TAMN y FTAMN de maneras distintas entre sí.
 
 \begin{table}[ht]
 \renewcommand{\thetable}{12}
-\begin{threeparttable}
 \caption{Número de rezagos del VAR (criterio de Schwarz), submuestra
          pre-pandemia 2010--2020}
 \label{tab:rezagospre}
+\centering
 \small
 \begin{tabular}{lccccccccc}
 \toprule
@@ -1067,10 +1068,10 @@ identificación de la relación de cointegración de esas dos series.
 
 \begin{table}[ht]
 \renewcommand{\thetable}{16}
-\begin{threeparttable}
 \caption{Efecto traspaso $\beta_1$ (enfoque uniecuacional): paper
          original vs.\ muestra completa vs.\ submuestra pre-pandemia}
 \label{tab:comparatres}
+\centering
 \small
 \begin{tabular}{lccc}
 \toprule
