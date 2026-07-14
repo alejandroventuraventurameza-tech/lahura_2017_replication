@@ -701,68 +701,94 @@ series v_beta1_R9_ftamn
 ' patron que ya uso en todo el resto del archivo sin problemas) de la
 ' asignacion a la serie (que ahora solo copia un escalar simple, sin
 ' ningun "." ni "@" del lado derecho).
+' CORRECCION 5 (tambien encontrada corriendo esto en EViews real,
+' inmediatamente despues de la Correccion 4): separar el escalar
+' TAMPOCO fue suficiente -- el error persistio, pero esta vez EViews
+' mostro el valor YA RESUELTO en el mensaje ("V_BETA1_R1_PREF90(@LAST)
+' = 1.25880690501863"), confirmando que "!b1" si se calculo bien y que
+' el problema nunca fue el lado derecho de la asignacion (las
+' Correcciones 2, 3 y 4 estaban todas atacando el sintoma equivocado).
+' El problema real, ahora si aislado: EViews (esta version, al menos)
+' no acepta "@last" como INDICE de asignacion sobre una serie -- ni
+' con substitucion, ni literal, ni con RHS simple. Dato clave que
+' tenia disponible desde el principio y no use: el .prg ORIGINAL (el
+' que heredamos de Andrea y Valeria) escribia el resultado con
+' "v_beta1_{%s}(!i+1) = eq_roll_{%s}.@coefs(2)" sobre un VECTOR
+' (indice entero, no "@last") -- esa linea especifica NUNCA genero
+' error en ninguna corrida (el primer error real fue en el GRAPH, no
+' en esta asignacion, ver Correccion 1). Es decir, la indexacion
+' entera (!numero) SI funciona para escribir un valor puntual; lo que
+' nunca funciono fue "@last" como indice. Como la serie completa
+' cubre exactamente el rango del workfile (2010m08-2026m06, sin
+' observaciones ocultas antes o despues), la posicion (1-based) de la
+' ultima observacion de la ventana que empieza en la observacion
+' "!i+1" y tiene "!window" observaciones es sencillamente "!i+!window"
+' (ventana !i=0: cubre las obs. 1..72, ultima=72=0+72; !i=1: cubre
+' 2..73, ultima=73=1+72; etc.) -- un indice entero equivalente a
+' "@last" pero expresado como aritmetica de programa, que es
+' exactamente el patron ya probado en el .prg original.
 
 for !i = 0 to !nroll-1
   smpl @first+!i @first+!i+!window-1
   equation eq_roll_R1_pref90.cointreg(method=fmols,trend=c) R1_pref90 RP_ref
   !b1 = eq_roll_R1_pref90.@coefs(2)
-  v_beta1_R1_pref90(@last) = !b1
+  v_beta1_R1_pref90(!i+!window) = !b1
 next
 
 for !i = 0 to !nroll-1
   smpl @first+!i @first+!i+!window-1
   equation eq_roll_R2_corp_cp.cointreg(method=fmols,trend=c) R2_corp_cp RP_ref
   !b1 = eq_roll_R2_corp_cp.@coefs(2)
-  v_beta1_R2_corp_cp(@last) = !b1
+  v_beta1_R2_corp_cp(!i+!window) = !b1
 next
 
 for !i = 0 to !nroll-1
   smpl @first+!i @first+!i+!window-1
   equation eq_roll_R3_ge_cp.cointreg(method=fmols,trend=c) R3_ge_cp RP_ref
   !b1 = eq_roll_R3_ge_cp.@coefs(2)
-  v_beta1_R3_ge_cp(@last) = !b1
+  v_beta1_R3_ge_cp(!i+!window) = !b1
 next
 
 for !i = 0 to !nroll-1
   smpl @first+!i @first+!i+!window-1
   equation eq_roll_R4_me_cp.cointreg(method=fmols,trend=c) R4_me_cp RP_ref
   !b1 = eq_roll_R4_me_cp.@coefs(2)
-  v_beta1_R4_me_cp(@last) = !b1
+  v_beta1_R4_me_cp(!i+!window) = !b1
 next
 
 for !i = 0 to !nroll-1
   smpl @first+!i @first+!i+!window-1
   equation eq_roll_R5_corp_lp.cointreg(method=fmols,trend=c) R5_corp_lp RP_ref
   !b1 = eq_roll_R5_corp_lp.@coefs(2)
-  v_beta1_R5_corp_lp(@last) = !b1
+  v_beta1_R5_corp_lp(!i+!window) = !b1
 next
 
 for !i = 0 to !nroll-1
   smpl @first+!i @first+!i+!window-1
   equation eq_roll_R6_ge_lp.cointreg(method=fmols,trend=c) R6_ge_lp RP_ref
   !b1 = eq_roll_R6_ge_lp.@coefs(2)
-  v_beta1_R6_ge_lp(@last) = !b1
+  v_beta1_R6_ge_lp(!i+!window) = !b1
 next
 
 for !i = 0 to !nroll-1
   smpl @first+!i @first+!i+!window-1
   equation eq_roll_R7_me_lp.cointreg(method=fmols,trend=c) R7_me_lp RP_ref
   !b1 = eq_roll_R7_me_lp.@coefs(2)
-  v_beta1_R7_me_lp(@last) = !b1
+  v_beta1_R7_me_lp(!i+!window) = !b1
 next
 
 for !i = 0 to !nroll-1
   smpl @first+!i @first+!i+!window-1
   equation eq_roll_R8_tamn.cointreg(method=fmols,trend=c) R8_tamn RP_ref
   !b1 = eq_roll_R8_tamn.@coefs(2)
-  v_beta1_R8_tamn(@last) = !b1
+  v_beta1_R8_tamn(!i+!window) = !b1
 next
 
 for !i = 0 to !nroll-1
   smpl @first+!i @first+!i+!window-1
   equation eq_roll_R9_ftamn.cointreg(method=fmols,trend=c) R9_ftamn RP_ref
   !b1 = eq_roll_R9_ftamn.@coefs(2)
-  v_beta1_R9_ftamn(@last) = !b1
+  v_beta1_R9_ftamn(!i+!window) = !b1
 next
 
 smpl @all
