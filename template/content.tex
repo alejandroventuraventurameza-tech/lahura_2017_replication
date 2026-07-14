@@ -892,10 +892,36 @@ quiebre genuino en el vector de cointegración.
 
 Como evidencia complementaria -- y más intuitiva que una tabla de
 estadísticos $F$ -- estimamos el efecto traspaso en ventanas móviles
-de 72 meses (Gráfico~3, pendiente de exportar desde EViews, Anexo~A.10).
-El ejemplo más claro es TAMN, cuyo $\beta_1$ rodante cae de 1.41 (en
-ventanas centradas en 2016--2022) a 0.47 (ventana que termina en
-junio de 2026); FTAMN muestra el patrón inverso, de 1.29 a 1.86.
+de 72 meses (Gráfico~3). El código completo está en el Anexo~A.10; la
+primera versión de este gráfico tenía un error de especificación
+(extraía la constante de cada FMOLS rodante en vez de la pendiente
+$\beta_1$, documentado como ``Corrección 6'' en el Anexo~A.10) que
+produjo valores sin sentido económico (varias series entre 3 y 19);
+el gráfico de abajo ya está corregido y confirmado en EViews real.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.95\textwidth]{grafico_rolling.png}
+  \caption{Efecto traspaso ($\beta_1$) en ventanas móviles de 72 meses,
+           FMOLS, una por cada una de las 9 tasas activas.}
+  \label{fig:rolling}
+\end{figure}
+
+El patrón más llamativo del Gráfico~3 es que la mayoría de las series
+muestra un quiebre visible alrededor de 2018--2022 -- coincidiendo con
+la pandemia y el inicio del ciclo de alza de tasas --, no solo las que
+ya señalamos como problemáticas en el Cuadro 5. TAMN (R8) y FTAMN (R9)
+suben con fuerza hasta 2016--2018, caen hacia 2020, y después TAMN
+sigue descendiendo hasta ubicarse cerca de 0.3--0.5 hacia 2026,
+mientras FTAMN rebota a un rango de 2.0--2.8. Grandes Empresas y
+Medianas Empresas de largo plazo (R6 y R7) muestran una dinámica muy
+parecida entre sí: ambas caen a un mínimo cercano a 0.1--0.2 alrededor
+de 2018--2020 y luego repuntan abruptamente a un pico de 1.2--1.6 hacia
+2020--2022, antes de normalizarse de nuevo en 0.4--0.6 -- coherente con
+la inestabilidad de ambas series ya documentada arriba. Corporativa de
+largo plazo (R5) es la única serie que llega a cruzar por debajo de
+cero (mínimo apenas negativo) alrededor de 2018--2020, la evidencia
+más visual de que es la serie con el traspaso más frágil de las 9.
 
 \textbf{Conclusión de esta sección.} La muestra extendida no debería
 tratarse como una única relación estable de traspaso para las 9
@@ -1266,31 +1292,4 @@ el ajuste en vez de mejorarlo. Se probaron además variantes con el
 término contemporáneo $\Delta RP_t$ y con la restricción de
 exogeneidad débil relajada (esta última confirmó que la restricción
 original es la correcta: el coeficiente adicional resultó no
-significativo), la precisión del $\beta_1$/intercepto impuestos en el
-bloque restringido (validada de forma independiente: reproduce 30/30
-valores primarios exactos en las 5 series con Bloque 4, ver Anexo~A.7,
-por lo que se descarta como fuente del error), y la inclusión del
-régimen $u^{+}_{t-1}$ (no significativo). Tras múltiples vías de
-investigación independientes documentadas en \texttt{P1\_4c}, el
-$\alpha$ de esta fila no se pudo replicar con la información
-metodológica pública disponible -- mismo estándar aplicado a R5/R7/R8
-(Cuadro 4) y al Bloque 4 original de R2 (Cuadro 5, ver Anexo~A.7). Sin
-embargo, se identificó que el Promedio de Cuadro 5' usa la misma
-fórmula de Hendry \parencite{hendry1995} que el MCE lineal (no
-$-1/\alpha$, como se documentó inicialmente): el propio Promedio
-impreso por el paper para R3 y R4 no es autoconsistente con su propio
-$\alpha$ bajo $-1/\alpha$, lo que reveló el error de convención. Con
-la fórmula corregida y una especificación con término contemporáneo
-confirmada en EViews real, el Promedio reportado mejoró sustancialmente
-(Grandes Empresas $\le$360d: de 5.6 a 3.5, objetivo 4.1; Medianas
-Empresas $\le$360d: de 2.9 a 1.5, objetivo 1.1), dejando al $\alpha$
-como el único valor no exacto de esta fila.
-
-%%=============================================================
-%% BIBLIOGRAFÍA
-%%=============================================================
-\clearpage
-\pagestyle{plain}
-\printbibliography[title={Referencias}]
-
-\end{document}
+significativo), la precisión del $\beta_1$/intercepto
