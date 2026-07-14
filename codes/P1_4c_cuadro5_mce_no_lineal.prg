@@ -345,4 +345,4 @@ show sys_mcenl_R3_ge_cp_v2.output
 ' Ambas filas quedan con el ALPHA como unico valor no exacto de esta
 ' tabla -- el Promedio, antes la brecha mas grande, es ahora la mas
 ' pequeña en terminos relativos gracias a la correccion de formula.
-' ============================================
+' ============================================================

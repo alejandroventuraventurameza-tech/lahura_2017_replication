@@ -139,4 +139,4 @@ graph gr_ftamn.line gg_ftamn
 ' 3. OK para cerrar ese grafico. Repetir con el siguiente.
 '
 ' Cuando termines los 9, corre P1_1b_paneles_finales.prg.
-' =======================================================
+' ============================================================

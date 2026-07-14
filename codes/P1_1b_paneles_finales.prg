@@ -97,4 +97,4 @@ gr_ftamn.addtext(t) {%t_ftamn}
 ' - Escala de ejes / dual scale / overlap: no tiene sintaxis de codigo
 '   verificada en ninguna de las dos guias que tienes (son puramente
 '   GUI en la documentacion). Por eso se hace a mano, en la Parte A.
-' =================================================
+' ============================================================

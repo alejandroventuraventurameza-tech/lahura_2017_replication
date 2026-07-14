@@ -979,4 +979,6 @@ show eq_fmols_R8_tamn.output
 ' Cuadro 4 sin explicacion identificada -- ni matematicamente imposible
 ' (como R5), ni con evidencia de revision de datos, ni explicable por
 ' una formula alternativa citada en el paper. Se mantiene como caso
-' abierto, documentado con el 
+' abierto, documentado con el mismo estandar de transparencia que el
+' resto de este trabajo.
+' ============================================================

@@ -53,4 +53,4 @@ next
 '   contrastar linea por linea como el resto. Por eso corri esto primero
 '   solo, con una sola serie, para confirmar que funcionaba antes de
 '   avanzar al Cuadro 3, que tiene comandos mas riesgosos (cointegracion).
-' =====================================================
+' ============================================================

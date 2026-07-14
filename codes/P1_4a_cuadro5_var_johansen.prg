@@ -734,4 +734,3 @@ show eq_nls_R2_corp_cp.output
 '      efectivamente se reporta en el Cuadro 5 (con restricciones
 '      para R1-R5,R9; sin restricciones para R6-R8).
 ' ============================================================
-                                                     
