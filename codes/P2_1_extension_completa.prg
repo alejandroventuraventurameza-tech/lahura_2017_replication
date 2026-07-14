@@ -627,7 +627,7 @@ show vec_R9_ftamn.output
 !nobs = 191
 !nroll = !nobs - !window + 1
 
-' CORRECCION (encontrada corriendo esto en EViews real): habia
+' CORRECCION 1 (encontrada corriendo esto en EViews real): habia
 ' declarado v_beta1_{%s} como "vector" (objeto de algebra de
 ' matrices), pero luego trato de graficarlo con "graph.line" como si
 ' fuera una serie del workfile -- EViews rechazo con "V_BETA1_... is
@@ -635,8 +635,33 @@ show vec_R9_ftamn.output
 ' fechas es una "series" del workfile, indexada por la fecha de FIN de
 ' cada ventana (uso @last dentro del smpl de la ventana, en vez de
 ' calcular el offset a mano), no un vector 1-indexado aparte.
+' CORRECCION 2 (tambien encontrada corriendo esto en EViews real,
+' inmediatamente despues de la Correccion 1): declarar "series
+' v_beta1_{%s}" CON substitucion dinamica de nombre DENTRO del propio
+' "for %s ... next" (justo antes del loop anidado "for !i") le genero
+' a EViews el error "V_BETA1_R1_pref90 is not defined or is an illegal
+' command" en la linea de asignacion -- aun cuando la declaracion
+' "eq_roll_{%s}" (misma tecnica, misma linea del loop) si funciona sin
+' problema. No hay documentacion oficial que explique por que un
+' "series" recien declarado por substitucion de nombre dentro de un
+' for anidado no queda "visible" para la linea de asignacion un par de
+' lineas despues, asi que en vez de seguir adivinando dejo de usar
+' substitucion dinamica para ESTA declaracion en particular: declaro
+' las 9 series v_beta1_<serie> a mano, con su nombre literal, ANTES de
+' entrar al for -- exactamente el mismo criterio (no adivinar sintaxis
+' sin poder correr EViews yo mismo) que ya use para revertir el
+' Cuadro 3/Cuadro 5 a procedimiento manual.
+series v_beta1_R1_pref90
+series v_beta1_R2_corp_cp
+series v_beta1_R3_ge_cp
+series v_beta1_R4_me_cp
+series v_beta1_R5_corp_lp
+series v_beta1_R6_ge_lp
+series v_beta1_R7_me_lp
+series v_beta1_R8_tamn
+series v_beta1_R9_ftamn
+
 for %s R1_pref90 R2_corp_cp R3_ge_cp R4_me_cp R5_corp_lp R6_ge_lp R7_me_lp R8_tamn R9_ftamn
-  series v_beta1_{%s}
   for !i = 0 to !nroll-1
     smpl @first+!i @first+!i+!window-1
     equation eq_roll_{%s}.cointreg(method=fmols,trend=c) {%s} RP_ref
