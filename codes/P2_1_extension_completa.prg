@@ -197,11 +197,19 @@ next
 ' ============================================================
 ' SECCION 3: Cuadro 3 extendido -- cointegracion
 ' (a) Engle-Granger: FMOLS + ADF sobre el residuo, rezago por serie.
-' (b) Johansen: Group.coint(2,1,N), Caso 2, N calibrado por serie
+' (b) Johansen: prueba manual via GUI (ver bloque de instrucciones mas
+'     abajo, antes de los 9 grupos), Caso 2, N calibrado por serie
 '     (esto es lo que pedia el comentario de mis companeras: agregar
 '     el # de rezagos correspondiente a cada hipotesis).
 ' MISMA LIMITACION que en P1_2c: el dialogo de Johansen SIEMPRE se
-' abre, no hay forma de correrlo sin confirmacion manual.
+' abre, no hay forma de correrlo sin confirmacion manual -- probe DOS
+' sintaxis de linea de comandos distintas, ambas documentadas en el
+' Command Reference de EViews (".coint(2,1,N)" y luego
+' ".coint(determ=cltn) 1 N"), y las DOS fueron rechazadas en EViews
+' real con el mismo error ("COINT command requires trend specification
+' option"). Como ya sabiamos por P1_2c que este paso es manual sin
+' remedio, dejo de intentar automatizarlo y seguimos el procedimiento
+' manual que ya esta probado.
 ' ============================================================
 
 for %s R1_pref90 R2_corp_cp R3_ge_cp R4_me_cp R5_corp_lp R6_ge_lp R7_me_lp R8_tamn R9_ftamn
@@ -245,26 +253,20 @@ next
 ' de rezago distintos, igual que en el Cuadro 3 original del paper).
 '   R1: N=1   R2: N=1   R3: N=1   R4: N=1   R5: N=1
 '   R6: N=4   R7: N=2   R8: N=1   R9: N=4
-' CORRECCION IMPORTANTE (encontrada corriendo esto en EViews real):
-' mi primer intento uso ".coint(2,1,N)" -- sintaxis invalida, EViews la
-' rechazo con "COINT command requires trend specification option". La
-' sintaxis real (Command Reference, Group::coint) especifica el Caso 2
-' con la palabra clave "determ=cltn" (no un numero), y el intervalo de
-' rezagos va FUERA del parentesis, no como argumentos separados por
-' coma: group_name.coint(determ=cltn) lag_lo lag_hi. Con esta sintaxis
-' corregida, el comando corre headless (no abre el dialogo interactivo,
-' a diferencia de lo que documente antes en el Anexo B.1 -- ver
-' correccion tambien ahi). Critical values MHM (1999) es el default,
-' no hace falta especificarlo.
-gg_R1_pref90.coint(determ=cltn) 1 1
-gg_R2_corp_cp.coint(determ=cltn) 1 1
-gg_R3_ge_cp.coint(determ=cltn) 1 1
-gg_R4_me_cp.coint(determ=cltn) 1 1
-gg_R5_corp_lp.coint(determ=cltn) 1 1
-gg_R6_ge_lp.coint(determ=cltn) 1 4
-gg_R7_me_lp.coint(determ=cltn) 1 2
-gg_R8_tamn.coint(determ=cltn) 1 1
-gg_R9_ftamn.coint(determ=cltn) 1 4
+' PROCEDIMIENTO MANUAL (identico al de P1_2c, Anexo B.1), una vez por
+' cada uno de los 9 grupos gg_<serie> ya creados en la Seccion 1:
+'   1. Abrir el grupo gg_<serie>.
+'   2. View -> Cointegration Test -> Johansen System Cointegration Test...
+'   3. Deterministic trend assumption -> opcion "2) Intercept (no
+'      trend) in CE - no intercept in VAR".
+'   4. Lag intervals for D(endogenous): escribir "1 N" con el N de
+'      esta serie (tabla arriba).
+'   5. Critical Values: dejar marcado MacKinnon-Haug-Michelis (1999)
+'      (viene asi por defecto).
+'   6. OK. De la tabla "Trace test", anotar la probabilidad de la fila
+'      "None" (H0: r=0) y de la fila "At most 1" (H0: r=1).
+' Repetir para las 9 series y pasar los 18 valores al resumen de mas
+' abajo / al Cuadro 3 de content.tex.
 
 ' Verificado en Python (mismo procedimiento RRR de Johansen, propio,
 ' cruzado contra statsmodels VECM para los alpha/beta -- ver Seccion 6
@@ -375,33 +377,38 @@ show eq_mce_R9_ftamn.output
 
 ' ============================================================
 ' SECCION 5: Cuadro 5 extendido -- VAR cointegrado (Johansen),
-' enfoque multiecuacional. Mismo procedimiento de P1_4a: Caso 2 fijado
-' a mano (el comando var.ec() por defecto usa el Caso 3, hay que
-' corregirlo en el dialogo "Estimate -> Cointegration -> opcion 2"),
-' luego restricciones va Chi2 traspaso completo, y exogeneidad debil.
-' Esto es justamente el "usar los objetos vec_r1, vec_r2, etc para
-' aplicarles Cointegration test" que pedia el comentario de mis
+' enfoque multiecuacional. Mismo procedimiento de P1_4a: el comando
+' var.ec() crea el objeto sin abrir dialogo, pero SIEMPRE con el
+' supuesto de tendencia por defecto (Caso 3) -- hay que corregirlo a
+' mano en el dialogo "Estimate -> Cointegration -> opcion 2" para cada
+' uno de los 9 objetos (probe pasar "determ=cltn" como en el Cuadro 3,
+' pero dado que esa sintaxis ya fallo ahi, no la vuelvo a intentar aqui
+' -- me quedo con el procedimiento manual ya probado de P1_4a, Anexo
+' B.2), luego restricciones via Chi2 (traspaso completo, exogeneidad
+' debil). Esto es justamente el "usar los objetos vec_r1, vec_r2, etc
+' para aplicarles Cointegration test" que pedia el comentario de mis
 ' companeras -- creo los VAR/VEC (no los dejo sueltos como en su
 ' version original) y corro las pruebas de hipotesis sobre ellos.
 ' ============================================================
 
-var vec_R1_pref90.ec(determ=cltn) 1 1 R1_pref90 RP_ref
-var vec_R2_corp_cp.ec(determ=cltn) 1 1 R2_corp_cp RP_ref
-var vec_R3_ge_cp.ec(determ=cltn) 1 1 R3_ge_cp RP_ref
-var vec_R4_me_cp.ec(determ=cltn) 1 1 R4_me_cp RP_ref
-var vec_R5_corp_lp.ec(determ=cltn) 1 1 R5_corp_lp RP_ref
-var vec_R6_ge_lp.ec(determ=cltn) 1 4 R6_ge_lp RP_ref
-var vec_R7_me_lp.ec(determ=cltn) 1 2 R7_me_lp RP_ref
-var vec_R8_tamn.ec(determ=cltn) 1 1 R8_tamn RP_ref
-var vec_R9_ftamn.ec(determ=cltn) 1 4 R9_ftamn RP_ref
+var vec_R1_pref90.ec(1) 1 1 R1_pref90 RP_ref
+var vec_R2_corp_cp.ec(1) 1 1 R2_corp_cp RP_ref
+var vec_R3_ge_cp.ec(1) 1 1 R3_ge_cp RP_ref
+var vec_R4_me_cp.ec(1) 1 1 R4_me_cp RP_ref
+var vec_R5_corp_lp.ec(1) 1 1 R5_corp_lp RP_ref
+var vec_R6_ge_lp.ec(1) 1 4 R6_ge_lp RP_ref
+var vec_R7_me_lp.ec(1) 1 2 R7_me_lp RP_ref
+var vec_R8_tamn.ec(1) 1 1 R8_tamn RP_ref
+var vec_R9_ftamn.ec(1) 1 4 R9_ftamn RP_ref
 
-' CORRECCION (mismo hallazgo que en el Cuadro 3): el comando .ec()
-' acepta el Caso 2 directo por "determ=cltn" (Command Reference,
-' Var::ec) -- no hace falta el paso manual "Estimate -> Cointegration
-' -> opcion 2" que documente antes en el Anexo B.2 (ese Anexo queda
-' desactualizado, lo corrijo en content.tex). Si por algun motivo tu
-' version de EViews igual abre el dialogo, ahi si sigue el paso manual
-' como respaldo.
+' PROCEDIMIENTO MANUAL (identico a P1_4a, Anexo B.2), para CADA uno de
+' los 9 objetos VAR recien creados:
+'   1. Doble clic en el objeto vec_<serie> para abrirlo.
+'   2. Estimate -> pestaña "Cointegration".
+'   3. Marcar el radio-boton "2) Intercept (no trend) in CE - no
+'      intercept in VAR" (viene marcada la opcion 3 por defecto).
+'   4. OK. (Este ajuste no se hereda entre objetos: hay que repetirlo
+'      en cada uno de los 9.)
 show vec_R1_pref90.output
 show vec_R2_corp_cp.output
 show vec_R3_ge_cp.output
