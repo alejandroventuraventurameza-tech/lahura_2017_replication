@@ -54,7 +54,8 @@ ef_pucp/
 │   ├── tasas_interes_lahura2017_ext.xlsx / .csv panel P2 (191 obs., ago.2010–jun.2026)
 │   ├── tasas_interes_lahura2017.wf1          workfile de EViews
 │   └── BCRPData-metadata-*.csv               catálogo de series BCRP (verificación de códigos)
-├── ef_metriamacro.pdf                        enunciado del examen final
+├── ef_metriamacro.pdf                        [solo local, excluido de GitHub]
+│                                              enunciado del examen final
 ├── nota_semanal/                             [solo local, excluido de GitHub] 5 Notas Semanales
 │                                              BCRP (verificación de vintage TAMN)
 ├── referencias_pdf/                          [solo local, excluido de GitHub — ver .gitignore]
@@ -200,5 +201,4 @@ Evidencia reciente. *Revista Estudios Económicos*, 33, 9–27. BCRP.
 ## Autoría y licencia
 
 Trabajo académico elaborado para el curso Econometría Intermedia: Macro (2026-1, PUCP).
-Uso restringido a fines de evaluación del curso; no se otorga licencia de reutilización sobre
-el análisis, el código o el documento sin autorización de los autores.
+Uso restringido a fines de evaluación del curso; no se otorga licencia de reutilizació

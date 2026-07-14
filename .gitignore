@@ -16,6 +16,10 @@
 /sander2004.pdf
 /EBSCO-FullText-*.pdf
 
+# Enunciado del examen final: no debe quedar público por si el profesor
+# lo reutiliza en otro semestre; se conserva solo en la copia local.
+/ef_metriamacro.pdf
+
 # Manuales de EViews (material de terceros, ~42 MB, no es contenido del proyecto)
 /EViews*.pdf
 
@@ -24,8 +28,8 @@
 /nota_semanal/
 /data/historico_bcrp/
 
-# --- Material fuente de Valeria y Andrea (Pregunta 2): ya fusionado con
-#     mi propio código y documento (Anexo A.10, Sección 2.3 y 2.4 del
+# --- Material fuente original de la Pregunta 2: ya fusionado con el
+#     código y documento propios (Anexo A.10, Sección 2.3 y 2.4 del
 #     content.tex); se conserva localmente para trazabilidad pero no se
 #     sube al repositorio para evitar duplicar contenido ya integrado. ---
 /template/pregunta_2/
@@ -56,12 +60,4 @@
 *.snm
 *.vrb
 
-# --- Python / Jupyter -------------------------------------------------------
-__pycache__/
-*.pyc
-.ipynb_checkpoints/
-
-# --- Sistema operativo -------------------------------------------------------
-.DS_Store
-Thumbs.db
-desktop.ini
+# --- Python / Jupyter ---------------------------------------------------
