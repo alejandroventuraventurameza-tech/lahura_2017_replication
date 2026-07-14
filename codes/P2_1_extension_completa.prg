@@ -661,13 +661,87 @@ series v_beta1_R7_me_lp
 series v_beta1_R8_tamn
 series v_beta1_R9_ftamn
 
-for %s R1_pref90 R2_corp_cp R3_ge_cp R4_me_cp R5_corp_lp R6_ge_lp R7_me_lp R8_tamn R9_ftamn
-  for !i = 0 to !nroll-1
-    smpl @first+!i @first+!i+!window-1
-    equation eq_roll_{%s}.cointreg(method=fmols,trend=c) {%s} RP_ref
-    v_beta1_{%s}(@last) = eq_roll_{%s}.@coefs(2)
-  next
+' CORRECCION 3 (tambien encontrada corriendo esto en EViews real,
+' inmediatamente despues de la Correccion 2): declarar las 9 series a
+' mano (arriba) NO fue suficiente -- el mismo error "V_BETA1_R1_pref90
+' is not defined or is an illegal command" volvio a salir, exactamente
+' en la misma linea de asignacion "v_beta1_{%s}(@last) = ...", con el
+' MISMO patron raro donde "EQ_ROLL_R1_PREF90" si aparece resuelto en
+' el mensaje de error pero "V_BETA1_{%S}" no. Con dos intentos
+' fallidos ya (uno cambiando COMO se declara la serie, otro cambiando
+' CUANDO se declara), lo que queda en comun entre ambos intentos
+' fallidos es la sintaxis misma de la linea de asignacion: un nombre
+' de objeto construido por substitucion de texto ({%s}) usado
+' inmediatamente como destino indexado por fecha
+' (nombre_{%s}(@last) = ...). Sospecho que EViews simplemente no
+' soporta esa combinacion especifica (substitucion de nombre + indice
+' de fecha en el LADO IZQUIERDO de una asignacion dentro de un for),
+' aunque si soporta la substitucion en cualquier otro lado de la misma
+' linea (por eso "eq_roll_{%s}.cointreg(...)" y "eq_roll_{%s}.@coefs(2)"
+' si funcionan sin problema, incluso en la misma linea que falla). En
+' vez de seguir adivinando por que, desenrollo el "for %s ... next" en
+' 9 bloques literales (una por serie, sin ninguna substitucion de
+' nombre en la linea de asignacion) -- mismo principio que ya use dos
+' veces para Johansen/VEC Caso 2: cuando la sintaxis dinamica no
+' coopera y no puedo probarla yo mismo en EViews, uso la version
+' explicita que si es segura (exactamente el mismo patron, sin
+' substitucion, que ya funciona en las 9 ecuaciones eq_mce_<serie> de
+' la Seccion 4).
+
+for !i = 0 to !nroll-1
+  smpl @first+!i @first+!i+!window-1
+  equation eq_roll_R1_pref90.cointreg(method=fmols,trend=c) R1_pref90 RP_ref
+  v_beta1_R1_pref90(@last) = eq_roll_R1_pref90.@coefs(2)
 next
+
+for !i = 0 to !nroll-1
+  smpl @first+!i @first+!i+!window-1
+  equation eq_roll_R2_corp_cp.cointreg(method=fmols,trend=c) R2_corp_cp RP_ref
+  v_beta1_R2_corp_cp(@last) = eq_roll_R2_corp_cp.@coefs(2)
+next
+
+for !i = 0 to !nroll-1
+  smpl @first+!i @first+!i+!window-1
+  equation eq_roll_R3_ge_cp.cointreg(method=fmols,trend=c) R3_ge_cp RP_ref
+  v_beta1_R3_ge_cp(@last) = eq_roll_R3_ge_cp.@coefs(2)
+next
+
+for !i = 0 to !nroll-1
+  smpl @first+!i @first+!i+!window-1
+  equation eq_roll_R4_me_cp.cointreg(method=fmols,trend=c) R4_me_cp RP_ref
+  v_beta1_R4_me_cp(@last) = eq_roll_R4_me_cp.@coefs(2)
+next
+
+for !i = 0 to !nroll-1
+  smpl @first+!i @first+!i+!window-1
+  equation eq_roll_R5_corp_lp.cointreg(method=fmols,trend=c) R5_corp_lp RP_ref
+  v_beta1_R5_corp_lp(@last) = eq_roll_R5_corp_lp.@coefs(2)
+next
+
+for !i = 0 to !nroll-1
+  smpl @first+!i @first+!i+!window-1
+  equation eq_roll_R6_ge_lp.cointreg(method=fmols,trend=c) R6_ge_lp RP_ref
+  v_beta1_R6_ge_lp(@last) = eq_roll_R6_ge_lp.@coefs(2)
+next
+
+for !i = 0 to !nroll-1
+  smpl @first+!i @first+!i+!window-1
+  equation eq_roll_R7_me_lp.cointreg(method=fmols,trend=c) R7_me_lp RP_ref
+  v_beta1_R7_me_lp(@last) = eq_roll_R7_me_lp.@coefs(2)
+next
+
+for !i = 0 to !nroll-1
+  smpl @first+!i @first+!i+!window-1
+  equation eq_roll_R8_tamn.cointreg(method=fmols,trend=c) R8_tamn RP_ref
+  v_beta1_R8_tamn(@last) = eq_roll_R8_tamn.@coefs(2)
+next
+
+for !i = 0 to !nroll-1
+  smpl @first+!i @first+!i+!window-1
+  equation eq_roll_R9_ftamn.cointreg(method=fmols,trend=c) R9_ftamn RP_ref
+  v_beta1_R9_ftamn(@last) = eq_roll_R9_ftamn.@coefs(2)
+next
+
 smpl @all
 
 ' Verificado en Python (identico procedimiento, misma ventana de 72
