@@ -89,8 +89,8 @@
 \usepackage{fancyhdr}
 \setlength{\headheight}{14pt}
 \fancyhf{}
-\rhead{\small Ventura et al.\ -- Examen Final}
-\lhead{\small Econometría Intermedia: Macro -- 2026-1}
+\rhead{\small Examen Final}
+\lhead{\small Econometría Intermedia: Macro 2026-1}
 \cfoot{\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
 
@@ -198,7 +198,7 @@ simple $R_{i,t} = c + b\cdot RP_t + u_t$).
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.95\textwidth]{grafico2.png}
+  \includegraphics[width=0.7\textwidth]{grafico2.png}
   \caption{Tasa de política monetaria y tasas Preferencial a 90 días,
            TAMN y FTAMN, agosto 2010 -- mayo 2017. Réplica del
            Gráfico 2 de \textcite{lahura2017}.}
@@ -662,7 +662,7 @@ cercanos a cero en 2020--2021 y el ciclo de alza posterior.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{grafico2_ext.png}
+  \includegraphics[width=0.7\textwidth]{grafico2_ext.png}
   \caption{Tasa de política monetaria y tasas Preferencial a 90 días,
            TAMN y FTAMN, muestra extendida agosto 2010 -- junio 2026.}
   \label{fig:g2ext}
@@ -897,7 +897,7 @@ extendido de la muestra completa (Cuadro~9 arriba).
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{grafico2_ext_pre.png}
+  \includegraphics[width=0.7\textwidth]{grafico2_ext_pre.png}
   \caption{Tasa de política monetaria y tasas Preferencial a 90 días,
            TAMN y FTAMN, submuestra pre-pandemia agosto 2010 -- febrero
            2020.}
@@ -1335,15 +1335,15 @@ carpeta de proyecto, \texttt{ef\_pucp/}, con la siguiente estructura:
 \begin{verbatim}
 ef_pucp/
 |-- template/
-|   |-- content.tex          documento principal (este archivo)
-|   |-- content.pdf          documento compilado
-|   |-- referencias.bib      bibliografia BibLaTeX / APA 7
+|   |-- content.tex          
+|   |-- content.pdf          
+|   |-- referencias.bib      
 |   `-- figures/
-|       |-- grafico1.png / grafico2.png                 Graficos 1-2 (Pregunta 1)
-|       |-- grafico1_ext.png / grafico2_ext.png         Graficos 1-2 extendidos (muestra completa)
-|       |-- grafico1_ext_pre.png / grafico2_ext_pre.png Graficos 1-2 (submuestra pre-pandemia)
-|       `-- grafico_rolling.png                          traspaso rodante (Seccion 2.4)
-|-- codes/                   12 archivos .prg de EViews (Anexo A)
+|       |-- grafico1.png / grafico2.png                 
+|       |-- grafico1_ext.png / grafico2_ext.png         
+|       |-- grafico1_ext_pre.png / grafico2_ext_pre.png
+|       `-- grafico_rolling.png                          
+|-- codes/                   
 |   |-- P1_1a_correlaciones_graficos.prg
 |   |-- P1_1b_paneles_finales.prg
 |   |-- P1_2a_cuadro2_raizunitaria.prg
@@ -1355,19 +1355,19 @@ ef_pucp/
 |   |-- P1_4a_cuadro5_var_johansen.prg
 |   |-- P1_4b_cuadro5_resumen.prg
 |   |-- P1_4c_cuadro5_mce_no_lineal.prg
-|   `-- P2_1_extension_completa.prg      Pregunta 2 completa (Anexo A.10)
+|   `-- P2_1_extension_completa.prg     
 |-- data/
-|   |-- bcrp_series.ipynb                  script de descarga P1 (Anexo C.1)
-|   |-- bcrp_series_p2.py                  script de descarga P2, muestra extendida
-|   |-- tasas_interes_lahura2017.xlsx/.csv panel P1 (82 obs., ago.2010-may.2017)
-|   |-- tasas_interes_lahura2017_ext.xlsx/.csv panel P2 (191 obs., ago.2010-jun.2026)
-|   |-- tasas_interes_lahura2017.wf1       workfile EViews
-|   `-- BCRPData-metadata-*.csv            catalogo de series BCRP
-|-- ef_metriamacro.pdf        [solo local, no en GitHub] enunciado del examen final
-|-- nota_semanal/             [solo local, no en GitHub] 5 Notas Semanales BCRP (verificacion TAMN, Anexo C)
-|-- referencias_pdf/          [solo local, no en GitHub] PDFs con copyright
+|   |-- bcrp_series.ipynb                  
+|   |-- bcrp_series_p2.py                  
+|   |-- tasas_interes_lahura2017.xlsx/.csv
+|   |-- tasas_interes_lahura2017_ext.xlsx/.csv
+|   |-- tasas_interes_lahura2017.wf1       
+|   `-- BCRPData-metadata-*.csv           
+|-- ef_metriamacro.pdf        [solo local, no en GitHub]
+|-- nota_semanal/             [solo local, no en GitHub]
+|-- referencias_pdf/          [solo local, no en GitHub]
 |-- .gitignore
-`-- README.md                 guia completa del proyecto y su estado
+`-- README.md                
 \end{verbatim}
 
 Los archivos \texttt{.prg} de \texttt{codes/} se referencian desde este
